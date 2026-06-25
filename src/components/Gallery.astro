@@ -1,0 +1,89 @@
+---
+interface GalleryImage {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+}
+
+const images: GalleryImage[] = [
+  {
+    src: "/images/photo-1.jpg",
+    alt: "[PLACEHOLDER: describe this photo of you, e.g. Speaking at a conference]",
+    width: 600,
+    height: 400,
+  },
+  {
+    src: "/images/photo-2.jpg",
+    alt: "[PLACEHOLDER: describe this photo of you, e.g. Working at a hackathon]",
+    width: 600,
+    height: 400,
+  },
+  {
+    src: "/images/photo-3.jpg",
+    alt: "[PLACEHOLDER: describe this photo of you, e.g. Headshot outdoors]",
+    width: 600,
+    height: 400,
+  },
+];
+---
+
+<section id="gallery" aria-labelledby="gallery-heading">
+  <div class="container">
+    <span class="eyebrow">Gallery</span>
+    <h2 id="gallery-heading">A Few Photos</h2>
+    <hr class="hairline" />
+    <div class="gallery-grid">
+      {images.map((img) => (
+        <div class="gallery-item fade-in">
+          <img
+            src={img.src}
+            alt={img.alt}
+            width={img.width}
+            height={img.height}
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      ))}
+    </div>
+    <p class="gallery-note">
+      [PLACEHOLDER: Drop your photos into public/images/ as photo-1.jpg, photo-2.jpg, photo-3.jpg]
+    </p>
+  </div>
+</section>
+
+<style>
+  .gallery-grid {
+    display: grid;
+    gap: var(--space-sm);
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 48rem) {
+    .gallery-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .gallery-item {
+    border-radius: var(--radius);
+    overflow: hidden;
+    background-color: var(--surface);
+    aspect-ratio: 3 / 2;
+  }
+
+  .gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .gallery-note {
+    margin-top: var(--space-sm);
+    font-size: 0.8rem;
+    color: var(--purple-lift);
+    font-style: italic;
+    text-align: center;
+  }
+</style>
