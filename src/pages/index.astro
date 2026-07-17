@@ -1,6 +1,7 @@
 ---
 import { site } from "../data/site";
 import { work } from "../data/work";
+import { writing } from "../data/writing";
 import "../styles/global.css";
 
 const buildDate = new Date().toLocaleDateString("en-US", {
@@ -34,7 +35,27 @@ const buildDate = new Date().toLocaleDateString("en-US", {
     <ul class="work-list">
       {work.map((entry) => (
         <li>
-          <a href={entry.url} class="work-name">{entry.name}</a>
+          {entry.url ? (
+            <a href={entry.url} class="work-name">{entry.name}</a>
+          ) : (
+            <span class="work-name">{entry.name}</span>
+          )}
+          <span class="work-date"> ({entry.date})</span>
+          <br />
+          <span class="work-desc">{entry.description}</span>
+        </li>
+      ))}
+    </ul>
+
+    <h2>Writing</h2>
+    <ul class="work-list">
+      {writing.map((entry) => (
+        <li>
+          {entry.url ? (
+            <a href={entry.url} class="work-name">{entry.name}</a>
+          ) : (
+            <span class="work-name">{entry.name}</span>
+          )}
           <span class="work-date"> ({entry.date})</span>
           <br />
           <span class="work-desc">{entry.description}</span>
