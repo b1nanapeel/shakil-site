@@ -1,18 +1,49 @@
 ---
-import Base from "../layouts/Base.astro";
-import Hero from "../components/Hero.astro";
-import Experience from "../components/Experience.astro";
-import Projects from "../components/Projects.astro";
-import Gallery from "../components/Gallery.astro";
-import Footer from "../components/Footer.astro";
+import { site } from "../data/site";
+import { work } from "../data/work";
+import "../styles/global.css";
+
+const buildDate = new Date().toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
 ---
 
-<Base>
-  <Hero />
-  <main>
-    <Experience />
-    <Projects />
-    <Gallery />
-  </main>
-  <Footer />
-</Base>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{site.name}</title>
+    <meta name="description" content={`${site.name} - personal site`} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <h1>{site.name}</h1>
+    <p class="updated">Updated {buildDate}</p>
+
+    <p set:html={site.bio} />
+
+    <div class="links">
+      {site.links.map((link) => (
+        <a href={link.url}>{link.label}</a>
+      ))}
+    </div>
+
+    <h2>Notable Work</h2>
+    <ul class="work-list">
+      {work.map((entry) => (
+        <li>
+          <a href={entry.url} class="work-name">{entry.name}</a>
+          <span class="work-date"> ({entry.date})</span>
+          <br />
+          <span class="work-desc">{entry.description}</span>
+        </li>
+      ))}
+    </ul>
+
+    <footer>
+      <a href={`mailto:${site.email}`}>{site.email}</a>
+    </footer>
+  </body>
+</html>
