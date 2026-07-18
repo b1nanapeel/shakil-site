@@ -1,45 +1,102 @@
 /* ============================================
-   MULTIVERSE THEME SYSTEM
+   MULTIVERSE THEME SYSTEM - FIVE UNIVERSES
    ============================================ */
 
-/* SUNRISE (default) */
+/* WASH (default) - watercolor pastel */
 :root,
-[data-theme="sunrise"] {
-  --bg: #FFF8EC;
-  --ink: #1a1810;
-  --ink-muted: #6b6456;
-  --accent: #F7C948;
-  --secondary: #E5484D;
-  --halftone: rgba(26, 24, 16, 0.04);
-  --card-shadow: #F7C948;
-  --marquee-bg: #1a1810;
-  --marquee-fg: #FFF8EC;
+[data-theme="wash"] {
+  --bg: #FFF5F7;
+  --bg-gradient: linear-gradient(
+    180deg,
+    #FFF0F3 0%,
+    #F0FAFC 40%,
+    #F5F0FF 100%
+  );
+  --ink: #2E1065;
+  --ink-muted: #6B5B8D;
+  --accent: #E86AA6;
+  --secondary: #5BC8C4;
+  --halftone: rgba(46, 16, 101, 0.03);
+  --card-shadow: #E86AA6;
+  --marquee-bg: #2E1065;
+  --marquee-fg: #FFF5F7;
+  --radius: 6px;
+  --border-w: 2px;
+  --shadow-x: 4px;
+  --shadow-y: 4px;
 }
 
-/* POP */
-[data-theme="pop"] {
-  --bg: #F3F0FF;
-  --ink: #1B1340;
-  --ink-muted: #5B5394;
-  --accent: #E93D82;
-  --secondary: #00C2D7;
-  --halftone: rgba(27, 19, 64, 0.04);
-  --card-shadow: #E93D82;
-  --marquee-bg: #1B1340;
-  --marquee-fg: #F3F0FF;
+/* BROOKLYN - night city */
+[data-theme="brooklyn"] {
+  --bg: #141126;
+  --bg-gradient: none;
+  --ink: #F2EDE4;
+  --ink-muted: #9E96B0;
+  --accent: #FF3E8A;
+  --secondary: #37D0EE;
+  --halftone: rgba(242, 237, 228, 0.06);
+  --card-shadow: #FF3E8A;
+  --marquee-bg: #F2EDE4;
+  --marquee-fg: #141126;
+  --radius: 6px;
+  --border-w: 2px;
+  --shadow-x: 4px;
+  --shadow-y: 4px;
 }
 
-/* MIDNIGHT */
-[data-theme="midnight"] {
-  --bg: #0E0D16;
-  --ink: #F0ECE0;
-  --ink-muted: #9994A8;
-  --accent: #FF4FA3;
-  --secondary: #8AFF80;
-  --halftone: rgba(240, 236, 224, 0.03);
-  --card-shadow: #FF4FA3;
-  --marquee-bg: #F0ECE0;
-  --marquee-fg: #0E0D16;
+/* BAZAAR - warm maximal city */
+[data-theme="bazaar"] {
+  --bg: #FFF1DC;
+  --bg-gradient: none;
+  --ink: #3B1518;
+  --ink-muted: #7A4A3A;
+  --accent: #F4772E;
+  --secondary: #E23E7B;
+  --halftone: rgba(59, 21, 24, 0.04);
+  --card-shadow: #F4772E;
+  --marquee-bg: #3B1518;
+  --marquee-fg: #FFF1DC;
+  --radius: 6px;
+  --border-w: 2px;
+  --shadow-x: 4px;
+  --shadow-y: 4px;
+}
+
+/* CHROME - futurist brutalism */
+[data-theme="chrome"] {
+  --bg: #EEF1F6;
+  --bg-gradient: none;
+  --ink: #0A1128;
+  --ink-muted: #4A5568;
+  --accent: #E5303E;
+  --secondary: #2E6BFF;
+  --halftone: rgba(10, 17, 40, 0.04);
+  --card-shadow: #E5303E;
+  --marquee-bg: #0A1128;
+  --marquee-fg: #EEF1F6;
+  --radius: 2px;
+  --border-w: 2px;
+  --shadow-x: 4px;
+  --shadow-y: 4px;
+}
+
+/* BRICK - plastic toy world */
+[data-theme="brick"] {
+  --bg: #FFFFFF;
+  --bg-gradient: none;
+  --ink: #1A1A1A;
+  --ink-muted: #555555;
+  --accent: #D01012;
+  --secondary: #FFCF00;
+  --link-underline: #0055BF;
+  --halftone: rgba(26, 26, 26, 0.04);
+  --card-shadow: #D01012;
+  --marquee-bg: #1A1A1A;
+  --marquee-fg: #FFFFFF;
+  --radius: 8px;
+  --border-w: 3px;
+  --shadow-x: 6px;
+  --shadow-y: 6px;
 }
 
 /* ============================================
@@ -69,7 +126,16 @@ html {
   transition: background 250ms ease, color 250ms ease;
 }
 
-/* During a dimension hop, extend transition to 500ms for smooth crossfade */
+/* Wash gradient background */
+[data-theme="wash"] body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: var(--bg-gradient);
+  z-index: -1;
+  pointer-events: none;
+}
+
 html.hopping {
   transition: background 500ms ease, color 500ms ease;
 }
@@ -78,6 +144,7 @@ body {
   max-width: 680px;
   margin: 0 auto;
   padding: 5rem 1.5rem 3rem;
+  position: relative;
 }
 
 /* ============================================
@@ -99,14 +166,14 @@ body {
   top: 1.25rem;
   right: 1.25rem;
   display: flex;
-  gap: 0.5rem;
+  gap: 0.4rem;
   z-index: 100;
   align-items: center;
 }
 
 .theme-dot {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
   border: 2px solid transparent;
   cursor: pointer;
@@ -114,7 +181,6 @@ body {
     border-color 200ms ease;
   display: block;
   padding: 0;
-  background: none;
   -webkit-appearance: none;
   appearance: none;
 }
@@ -123,21 +189,35 @@ body {
   transform: scale(1.3);
 }
 
-.theme-dot[data-dot="sunrise"] {
-  background-color: #F7C948;
+/* Dot colors: accent on a hint of the universe bg */
+.theme-dot[data-dot="wash"] {
+  background-color: #E86AA6;
+  box-shadow: inset 0 0 0 1px rgba(46, 16, 101, 0.15);
 }
 
-.theme-dot[data-dot="pop"] {
-  background-color: #E93D82;
+.theme-dot[data-dot="brooklyn"] {
+  background-color: #FF3E8A;
+  box-shadow: inset 0 0 0 1px rgba(20, 17, 38, 0.3);
 }
 
-.theme-dot[data-dot="midnight"] {
-  background-color: #FF4FA3;
+.theme-dot[data-dot="bazaar"] {
+  background-color: #F4772E;
+  box-shadow: inset 0 0 0 1px rgba(59, 21, 24, 0.15);
+}
+
+.theme-dot[data-dot="chrome"] {
+  background-color: #E5303E;
+  box-shadow: inset 0 0 0 1px rgba(10, 17, 40, 0.15);
+}
+
+.theme-dot[data-dot="brick"] {
+  background-color: #D01012;
+  box-shadow: inset 0 0 0 1px rgba(26, 26, 26, 0.15);
 }
 
 .theme-dot.active {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   border-color: var(--ink);
   transform: scale(1);
 }
@@ -159,7 +239,7 @@ body {
   align-items: center;
   justify-content: center;
   padding: 0;
-  margin-left: 0.25rem;
+  margin-left: 0.2rem;
   font-size: 9px;
   line-height: 1;
   transition: transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1),
@@ -179,7 +259,7 @@ body {
 }
 
 /* ============================================
-   GLITCH OVERLAY
+   GLITCH OVERLAY (hop + micro-bleed)
    ============================================ */
 
 .glitch-overlay {
@@ -199,7 +279,6 @@ body {
   position: absolute;
   left: 0;
   right: 0;
-  background: var(--bg);
   opacity: 0;
 }
 
@@ -218,6 +297,15 @@ body {
   height: 40px;
 }
 
+/* Micro-bleed: single slice, JS-positioned and colored */
+.bleed-slice {
+  position: absolute;
+  left: 0;
+  right: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
 html.hopping .glitch-overlay.active .glitch-slice-1 {
   animation: sliceShift1 500ms ease forwards;
 }
@@ -230,8 +318,6 @@ html.hopping .glitch-overlay.active .glitch-slice-3 {
   animation: sliceShift3 500ms ease forwards;
 }
 
-/* Each slice: appear, shift sideways briefly, disappear.
-   Single luminance change (transparent -> visible -> transparent). */
 @keyframes sliceShift1 {
   0% { opacity: 0; transform: translateX(0); }
   10% { opacity: 0.7; transform: translateX(6px); }
@@ -258,13 +344,27 @@ html.hopping .glitch-overlay.active .glitch-slice-3 {
   100% { opacity: 0; transform: translateX(0); }
 }
 
-/* RGB split on name and section numbers during hop */
+/* Micro-bleed slice animation */
+@keyframes microBleed {
+  0% { opacity: 0; transform: translateX(0); }
+  15% { opacity: 0.7; }
+  50% { opacity: 0.7; }
+  85% { opacity: 0; }
+  100% { opacity: 0; transform: translateX(0); }
+}
+
+/* RGB split on name during hop */
 html.hopping .big-name {
   animation: rgbSplitName 500ms ease forwards;
 }
 
 html.hopping .section-number {
   animation: rgbSplitNumber 500ms ease forwards;
+}
+
+/* RGB split on name during micro-bleed */
+html.bleeding .big-name {
+  animation: rgbSplitMicro 250ms ease forwards;
 }
 
 @keyframes rgbSplitName {
@@ -281,6 +381,13 @@ html.hopping .section-number {
   40% { text-shadow: 2px -2px 0 var(--accent), -2px 1px 0 var(--secondary); }
   60% { text-shadow: none; }
   100% { text-shadow: none; }
+}
+
+@keyframes rgbSplitMicro {
+  0% { text-shadow: 1px 1px 0 var(--accent); }
+  20% { text-shadow: 2px -1px 0 var(--accent), -2px 1px 0 var(--secondary); }
+  60% { text-shadow: 2px -1px 0 var(--accent), -2px 1px 0 var(--secondary); }
+  100% { text-shadow: 1px 1px 0 var(--accent); }
 }
 
 /* Extend transitions on themed elements during hop */
@@ -324,6 +431,15 @@ html.hopping .auto-toggle {
   z-index: 0;
 }
 
+/* Brooklyn gets stronger halftone */
+[data-theme="brooklyn"] .name-block::before {
+  background-size: 6px 6px;
+}
+
+[data-theme="brooklyn"] .marquee-band::before {
+  opacity: 0.8;
+}
+
 .big-name {
   font-size: clamp(2.5rem, 6vw, 3.8rem);
   line-height: 1.1;
@@ -360,6 +476,16 @@ html.hopping .auto-toggle {
   transition: color 250ms ease;
 }
 
+/* Brick: blue underlines on links */
+[data-theme="brick"] .bio a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--link-underline);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 2px;
+  background-image: none;
+}
+
 .bio a:hover {
   color: var(--accent);
 }
@@ -378,7 +504,7 @@ html.hopping .auto-toggle {
 .pill {
   display: inline-block;
   padding: 0.35rem 1rem;
-  border: 2px solid var(--ink);
+  border: var(--border-w) solid var(--ink);
   border-radius: 999px;
   font-size: 0.9rem;
   font-weight: 600;
@@ -483,8 +609,8 @@ html.hopping .auto-toggle {
 .work-list li {
   padding: 0.75rem;
   margin-bottom: 0.75rem;
-  border: 2px solid transparent;
-  border-radius: 6px;
+  border: var(--border-w) solid transparent;
+  border-radius: var(--radius);
   transition: border-color 200ms ease,
     box-shadow 250ms cubic-bezier(0.34, 1.56, 0.64, 1),
     transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -492,7 +618,7 @@ html.hopping .auto-toggle {
 
 .work-list li:hover {
   border-color: var(--ink);
-  box-shadow: 4px 4px 0 var(--card-shadow);
+  box-shadow: var(--shadow-x) var(--shadow-y) 0 var(--card-shadow);
   transform: translate(-2px, -2px);
 }
 
@@ -510,6 +636,15 @@ a.work-name {
   background-size: 20px 4px;
   padding-bottom: 2px;
   transition: color 200ms ease;
+}
+
+/* Brick: blue underlines on work links */
+[data-theme="brick"] a.work-name {
+  text-decoration: underline;
+  text-decoration-color: var(--link-underline);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 2px;
+  background-image: none;
 }
 
 a.work-name:hover {
@@ -534,7 +669,7 @@ a.work-name:hover {
 footer {
   margin-top: 3rem;
   padding-top: 1.5rem;
-  border-top: 2px solid var(--ink);
+  border-top: var(--border-w) solid var(--ink);
   font-size: 0.85rem;
   color: var(--ink-muted);
   transition: border-color 250ms ease;
@@ -564,7 +699,6 @@ footer a:hover {
     transition: background 500ms ease, color 500ms ease;
   }
 
-  /* Kill all springy hovers and marquee scroll */
   .theme-dot,
   .theme-dot.active,
   .auto-toggle,
@@ -577,15 +711,16 @@ footer a:hover {
     animation: none;
   }
 
-  /* No glitch effects */
   html.hopping .big-name,
-  html.hopping .section-number {
+  html.hopping .section-number,
+  html.bleeding .big-name {
     animation: none !important;
   }
 
   .glitch-overlay.active .glitch-slice-1,
   .glitch-overlay.active .glitch-slice-2,
-  .glitch-overlay.active .glitch-slice-3 {
+  .glitch-overlay.active .glitch-slice-3,
+  .bleed-slice {
     animation: none !important;
     opacity: 0 !important;
   }
@@ -607,5 +742,16 @@ footer a:hover {
   .theme-switcher {
     top: 0.75rem;
     right: 0.75rem;
+    gap: 0.3rem;
+  }
+
+  .theme-dot {
+    width: 12px;
+    height: 12px;
+  }
+
+  .theme-dot.active {
+    width: 16px;
+    height: 16px;
   }
 }

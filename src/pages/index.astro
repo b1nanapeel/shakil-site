@@ -36,9 +36,12 @@ const marqueeText = "SHAKIL MUSTHAFA \u00B7 BUILDER \u00B7 ECONOMIST \u00B7 ";
     />
     <script is:inline>
       (function () {
+        var VALID = ["wash", "brooklyn", "bazaar", "chrome", "brick"];
         var t = localStorage.getItem("theme");
-        if (t && ["sunrise", "pop", "midnight"].indexOf(t) !== -1) {
+        if (t && VALID.indexOf(t) !== -1) {
           document.documentElement.setAttribute("data-theme", t);
+        } else {
+          document.documentElement.setAttribute("data-theme", "wash");
         }
       })();
     </script>
@@ -46,21 +49,11 @@ const marqueeText = "SHAKIL MUSTHAFA \u00B7 BUILDER \u00B7 ECONOMIST \u00B7 ";
   <body>
     <!-- Theme Switcher -->
     <div class="theme-switcher">
-      <button
-        class="theme-dot active"
-        data-dot="sunrise"
-        aria-label="Sunrise theme"
-      ></button>
-      <button
-        class="theme-dot"
-        data-dot="pop"
-        aria-label="Pop theme"
-      ></button>
-      <button
-        class="theme-dot"
-        data-dot="midnight"
-        aria-label="Midnight theme"
-      ></button>
+      <button class="theme-dot" data-dot="wash" aria-label="Wash theme"></button>
+      <button class="theme-dot" data-dot="brooklyn" aria-label="Brooklyn theme"></button>
+      <button class="theme-dot" data-dot="bazaar" aria-label="Bazaar theme"></button>
+      <button class="theme-dot" data-dot="chrome" aria-label="Chrome theme"></button>
+      <button class="theme-dot" data-dot="brick" aria-label="Brick theme"></button>
       <button
         class="auto-toggle playing"
         aria-label="Auto theme"
@@ -73,6 +66,7 @@ const marqueeText = "SHAKIL MUSTHAFA \u00B7 BUILDER \u00B7 ECONOMIST \u00B7 ";
       <div class="glitch-slice glitch-slice-1"></div>
       <div class="glitch-slice glitch-slice-2"></div>
       <div class="glitch-slice glitch-slice-3"></div>
+      <div class="bleed-slice"></div>
     </div>
 
     <!-- Name -->
@@ -152,21 +146,38 @@ const marqueeText = "SHAKIL MUSTHAFA \u00B7 BUILDER \u00B7 ECONOMIST \u00B7 ";
 
     <script is:inline>
       (function () {
-        var THEMES = ["sunrise", "pop", "midnight"];
+        var THEMES = ["wash", "brooklyn", "bazaar", "chrome", "brick"];
         var HOP_INTERVAL = 40000;
         var GLITCH_DURATION = 500;
+        var BLEED_MIN = 10000;
+        var BLEED_MAX = 14000;
+        var BLEED_DURATION_MIN = 200;
+        var BLEED_DURATION_MAX = 300;
+        var MIN_GAP = 7000;
+
+        /* Theme accent/bg lookup for bleed-through coloring */
+        var THEME_COLORS = {
+          wash:     { bg: "#FFF5F7", accent: "#E86AA6" },
+          brooklyn: { bg: "#141126", accent: "#FF3E8A" },
+          bazaar:   { bg: "#FFF1DC", accent: "#F4772E" },
+          chrome:   { bg: "#EEF1F6", accent: "#E5303E" },
+          brick:    { bg: "#FFFFFF", accent: "#D01012" }
+        };
 
         var root = document.documentElement;
         var dots = document.querySelectorAll(".theme-dot");
         var autoBtn = document.querySelector(".auto-toggle");
         var glitchOverlay = document.querySelector(".glitch-overlay");
+        var bleedSlice = document.querySelector(".bleed-slice");
         var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
         /* State */
-        var current = root.getAttribute("data-theme") || "sunrise";
+        var current = root.getAttribute("data-theme") || "wash";
         var autoMode = localStorage.getItem("autoTheme") !== "off";
         var hopTimer = null;
+        var bleedTimer = null;
         var glitchTimeout = null;
+        var lastEventTime = 0;
 
         /* Helpers */
         function currentIndex() {
@@ -175,6 +186,10 @@ const marqueeText = "SHAKIL MUSTHAFA \u00B7 BUILDER \u00B7 ECONOMIST \u00B7 ";
 
         function nextTheme() {
           return THEMES[(currentIndex() + 1) % THEMES.length];
+        }
+
+        function randomBetween(a, b) {
+          return a + Math.floor(Math.random() * (b - a));
         }
 
         function setActiveDot(name) {
@@ -191,9 +206,13 @@ const marqueeText = "SHAKIL MUSTHAFA \u00B7 BUILDER \u00B7 ECONOMIST \u00B7 ";
         function userBusy() {
           var sel = window.getSelection();
           if (sel && sel.toString().length > 0) return true;
-          if (document.activeElement && document.activeElement.tagName === "INPUT") return true;
-          if (document.activeElement && document.activeElement.tagName === "TEXTAREA") return true;
+          var tag = document.activeElement && document.activeElement.tagName;
+          if (tag === "INPUT" || tag === "TEXTAREA") return true;
           return false;
+        }
+
+        function timeSinceLastEvent() {
+          return Date.now() - lastEventTime;
         }
 
         /* Apply theme (no glitch) */
@@ -204,24 +223,79 @@ const marqueeText = "SHAKIL MUSTHAFA \u00B7 BUILDER \u00B7 ECONOMIST \u00B7 ";
           setActiveDot(name);
         }
 
-        /* Glitch hop */
+        /* ---- MICRO-BLEED GLITCH ---- */
+        function performBleed() {
+          if (!autoMode || userBusy() || reducedMotion.matches) return;
+          if (timeSinceLastEvent() < MIN_GAP) return;
+
+          lastEventTime = Date.now();
+
+          var next = nextTheme();
+          var colors = THEME_COLORS[next];
+          var height = randomBetween(20, 60);
+          var top = randomBetween(10, 80);
+          var offset = (Math.random() < 0.5 ? -1 : 1) * randomBetween(3, 6);
+          var duration = randomBetween(BLEED_DURATION_MIN, BLEED_DURATION_MAX);
+
+          bleedSlice.style.top = top + "%";
+          bleedSlice.style.height = height + "px";
+          bleedSlice.style.background = colors.bg;
+          bleedSlice.style.borderTop = "2px solid " + colors.accent;
+          bleedSlice.style.borderBottom = "2px solid " + colors.accent;
+          bleedSlice.style.transform = "translateX(" + offset + "px)";
+          bleedSlice.style.animation = "microBleed " + duration + "ms ease forwards";
+          bleedSlice.style.opacity = "0";
+
+          /* Trigger reflow to restart animation */
+          void bleedSlice.offsetWidth;
+          bleedSlice.style.animation = "none";
+          void bleedSlice.offsetWidth;
+          bleedSlice.style.animation = "microBleed " + duration + "ms ease forwards";
+
+          /* RGB split on name */
+          root.classList.add("bleeding");
+
+          glitchOverlay.classList.add("active");
+
+          setTimeout(function () {
+            glitchOverlay.classList.remove("active");
+            root.classList.remove("bleeding");
+            bleedSlice.style.animation = "none";
+            bleedSlice.style.opacity = "0";
+          }, duration + 50);
+        }
+
+        function scheduleBleed() {
+          if (bleedTimer) clearTimeout(bleedTimer);
+          if (!autoMode) return;
+          bleedTimer = setTimeout(function () {
+            performBleed();
+            scheduleBleed();
+          }, randomBetween(BLEED_MIN, BLEED_MAX));
+        }
+
+        /* ---- FULL HOP ---- */
         function performHop() {
           if (userBusy()) return;
+          if (timeSinceLastEvent() < MIN_GAP) return;
 
+          lastEventTime = Date.now();
           var target = nextTheme();
 
-          /* Add hopping class for extended transitions */
           root.classList.add("hopping");
 
-          /* Show glitch overlay (skipped if reduced motion) */
           if (!reducedMotion.matches) {
+            /* Color the hop slices with next theme */
+            var colors = THEME_COLORS[target];
+            var slices = glitchOverlay.querySelectorAll(".glitch-slice");
+            for (var i = 0; i < slices.length; i++) {
+              slices[i].style.background = colors.bg;
+            }
             glitchOverlay.classList.add("active");
           }
 
-          /* Swap the theme (colors crossfade via CSS transitions) */
           applyTheme(target);
 
-          /* Clean up after transition */
           if (glitchTimeout) clearTimeout(glitchTimeout);
           glitchTimeout = setTimeout(function () {
             root.classList.remove("hopping");
@@ -236,6 +310,7 @@ const marqueeText = "SHAKIL MUSTHAFA \u00B7 BUILDER \u00B7 ECONOMIST \u00B7 ";
           hopTimer = setInterval(function () {
             if (autoMode) performHop();
           }, HOP_INTERVAL);
+          scheduleBleed();
         }
 
         function stopAuto() {
@@ -243,9 +318,13 @@ const marqueeText = "SHAKIL MUSTHAFA \u00B7 BUILDER \u00B7 ECONOMIST \u00B7 ";
             clearInterval(hopTimer);
             hopTimer = null;
           }
+          if (bleedTimer) {
+            clearTimeout(bleedTimer);
+            bleedTimer = null;
+          }
         }
 
-        /* Manual dot click: switch theme, disable auto */
+        /* Manual dot click */
         dots.forEach(function (dot) {
           dot.addEventListener("click", function () {
             var theme = dot.getAttribute("data-dot");
