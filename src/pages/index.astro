@@ -16,6 +16,13 @@ const greeting =
   hours < 12 ? "Good morning" : hours < 18 ? "Good afternoon" : "Good evening";
 
 const marqueeText = "SHAKIL MUSTHAFA \u00B7 BUILDER \u00B7 ECONOMIST \u00B7 ";
+
+/* Split name into letters for jelly effect */
+const nameLetters = site.name.split("").map((ch, i) => ({
+  char: ch,
+  isSpace: ch === " ",
+  index: i,
+}));
 ---
 
 <html lang="en">
@@ -24,12 +31,8 @@ const marqueeText = "SHAKIL MUSTHAFA \u00B7 BUILDER \u00B7 ECONOMIST \u00B7 ";
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{site.name}</title>
     <meta name="description" content={`${site.name} - personal site`} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link
-      rel="preconnect"
-      href="https://fonts.googleapis.com"
-      crossorigin
-    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" id="favicon" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Rounded+Mplus+1c:wght@900&display=swap"
       rel="stylesheet"
@@ -54,11 +57,7 @@ const marqueeText = "SHAKIL MUSTHAFA \u00B7 BUILDER \u00B7 ECONOMIST \u00B7 ";
       <button class="theme-dot" data-dot="bazaar" aria-label="Bazaar theme"></button>
       <button class="theme-dot" data-dot="chrome" aria-label="Chrome theme"></button>
       <button class="theme-dot" data-dot="brick" aria-label="Brick theme"></button>
-      <button
-        class="auto-toggle playing"
-        aria-label="Auto theme"
-        title="auto theme"
-      >&#9654;</button>
+      <button class="auto-toggle playing" aria-label="Auto theme" title="auto theme">&#9654;</button>
     </div>
 
     <!-- Glitch Overlay -->
@@ -69,9 +68,20 @@ const marqueeText = "SHAKIL MUSTHAFA \u00B7 BUILDER \u00B7 ECONOMIST \u00B7 ";
       <div class="bleed-slice"></div>
     </div>
 
-    <!-- Name -->
+    <!-- Chase Overlay -->
+    <div class="chase-overlay" aria-hidden="true" id="chase-overlay"></div>
+
+    <!-- PART 1: Jelly Name -->
     <div class="name-block">
-      <h1 class="big-name font-bubble">{site.name}</h1>
+      <h1 class="big-name font-bubble" aria-label={site.name} id="jelly-name">
+        {nameLetters.map((l) =>
+          l.isSpace ? (
+            <span class="name-space" aria-hidden="true">&nbsp;</span>
+          ) : (
+            <span class="name-letter" aria-hidden="true" data-idx={l.index}>{l.char}</span>
+          )
+        )}
+      </h1>
     </div>
     <p class="updated">{greeting}. Updated {buildDate}.</p>
 
@@ -97,6 +107,9 @@ const marqueeText = "SHAKIL MUSTHAFA \u00B7 BUILDER \u00B7 ECONOMIST \u00B7 ";
       </div>
     </div>
 
+    <!-- Living divider -->
+    <div class="wave-divider" aria-hidden="true"></div>
+
     <!-- Notable Work -->
     <div class="section">
       <div class="section-header">
@@ -117,6 +130,9 @@ const marqueeText = "SHAKIL MUSTHAFA \u00B7 BUILDER \u00B7 ECONOMIST \u00B7 ";
         ))}
       </ul>
     </div>
+
+    <!-- Living divider -->
+    <div class="wave-divider" aria-hidden="true"></div>
 
     <!-- Writing -->
     <div class="section">
@@ -139,11 +155,46 @@ const marqueeText = "SHAKIL MUSTHAFA \u00B7 BUILDER \u00B7 ECONOMIST \u00B7 ";
       </ul>
     </div>
 
-    <!-- Footer -->
+    <!-- Footer with critters -->
     <footer>
+      <!-- PART 2: Critters sitting on the footer ledge -->
+      <div class="critter-ledge" aria-hidden="true">
+        <div class="critter critter-a" id="critter-a">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="20" cy="24" rx="16" ry="14" fill="var(--accent)"/>
+            <ellipse cx="13" cy="20" rx="3.5" ry="4" fill="white"/>
+            <ellipse cx="27" cy="20" rx="3.5" ry="4" fill="white"/>
+            <circle cx="14" cy="20.5" r="2" fill="var(--ink)"/>
+            <circle cx="28" cy="20.5" r="2" fill="var(--ink)"/>
+            <g class="critter-eye" id="eye-a">
+              <rect x="10" y="18" width="8" height="0" rx="1" fill="var(--accent)"/>
+              <rect x="23" y="18" width="8" height="0" rx="1" fill="var(--accent)"/>
+            </g>
+          </svg>
+        </div>
+        <div class="critter critter-b" id="critter-b">
+          <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 4 L32 28 Q32 32 28 32 L8 32 Q4 32 4 28 Z" fill="var(--secondary)"/>
+            <rect x="12" y="32" width="4" height="4" rx="2" fill="var(--secondary)"/>
+            <rect x="20" y="32" width="4" height="4" rx="2" fill="var(--secondary)"/>
+            <ellipse cx="13" cy="20" rx="3" ry="3.5" fill="white"/>
+            <ellipse cx="23" cy="20" rx="3" ry="3.5" fill="white"/>
+            <circle cx="14" cy="20.5" r="1.8" fill="var(--ink)"/>
+            <circle cx="24" cy="20.5" r="1.8" fill="var(--ink)"/>
+            <g class="critter-eye" id="eye-b">
+              <rect x="10" y="18" width="7" height="0" rx="1" fill="var(--secondary)"/>
+              <rect x="20" y="18" width="7" height="0" rx="1" fill="var(--secondary)"/>
+            </g>
+          </svg>
+        </div>
+      </div>
       <a href={`mailto:${site.email}`}>{site.email}</a>
+      <span class="footer-hint">press g</span>
     </footer>
 
+    <!-- ============================================
+         PERSONALITY MODULE
+         ============================================ -->
     <script is:inline>
       (function () {
         var THEMES = ["wash", "brooklyn", "bazaar", "chrome", "brick"];
@@ -155,13 +206,12 @@ const marqueeText = "SHAKIL MUSTHAFA \u00B7 BUILDER \u00B7 ECONOMIST \u00B7 ";
         var BLEED_DURATION_MAX = 300;
         var MIN_GAP = 7000;
 
-        /* Theme accent/bg lookup for bleed-through coloring */
         var THEME_COLORS = {
-          wash:     { bg: "#FFF5F7", accent: "#E86AA6" },
-          brooklyn: { bg: "#141126", accent: "#FF3E8A" },
-          bazaar:   { bg: "#FFF1DC", accent: "#F4772E" },
-          chrome:   { bg: "#EEF1F6", accent: "#E5303E" },
-          brick:    { bg: "#FFFFFF", accent: "#D01012" }
+          wash:     { bg: "#FFF5F7", accent: "#E86AA6", secondary: "#5BC8C4" },
+          brooklyn: { bg: "#141126", accent: "#FF3E8A", secondary: "#37D0EE" },
+          bazaar:   { bg: "#FFF1DC", accent: "#F4772E", secondary: "#E23E7B" },
+          chrome:   { bg: "#EEF1F6", accent: "#E5303E", secondary: "#2E6BFF" },
+          brick:    { bg: "#FFFFFF", accent: "#D01012", secondary: "#FFCF00" }
         };
 
         var root = document.documentElement;
@@ -169,28 +219,22 @@ const marqueeText = "SHAKIL MUSTHAFA \u00B7 BUILDER \u00B7 ECONOMIST \u00B7 ";
         var autoBtn = document.querySelector(".auto-toggle");
         var glitchOverlay = document.querySelector(".glitch-overlay");
         var bleedSlice = document.querySelector(".bleed-slice");
+        var chaseOverlay = document.getElementById("chase-overlay");
         var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+        var favicon = document.getElementById("favicon");
 
-        /* State */
         var current = root.getAttribute("data-theme") || "wash";
         var autoMode = localStorage.getItem("autoTheme") !== "off";
         var hopTimer = null;
         var bleedTimer = null;
         var glitchTimeout = null;
         var lastEventTime = 0;
+        var chaseRunning = false;
+        var chaseDirection = 1;
 
-        /* Helpers */
-        function currentIndex() {
-          return THEMES.indexOf(current);
-        }
-
-        function nextTheme() {
-          return THEMES[(currentIndex() + 1) % THEMES.length];
-        }
-
-        function randomBetween(a, b) {
-          return a + Math.floor(Math.random() * (b - a));
-        }
+        function currentIndex() { return THEMES.indexOf(current); }
+        function nextTheme() { return THEMES[(currentIndex() + 1) % THEMES.length]; }
+        function randomBetween(a, b) { return a + Math.floor(Math.random() * (b - a)); }
 
         function setActiveDot(name) {
           dots.forEach(function (d) {
@@ -211,23 +255,183 @@ const marqueeText = "SHAKIL MUSTHAFA \u00B7 BUILDER \u00B7 ECONOMIST \u00B7 ";
           return false;
         }
 
-        function timeSinceLastEvent() {
-          return Date.now() - lastEventTime;
+        function timeSinceLastEvent() { return Date.now() - lastEventTime; }
+
+        /* ---- PART 7: THEME FAVICON ---- */
+        function updateFavicon(accent) {
+          var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">'
+            + '<rect width="100" height="100" rx="12" fill="' + accent + '"/>'
+            + '<text x="50" y="68" font-family="sans-serif" font-size="48" font-weight="600" fill="white" text-anchor="middle">SM</text>'
+            + '</svg>';
+          favicon.href = "data:image/svg+xml," + encodeURIComponent(svg);
         }
 
-        /* Apply theme (no glitch) */
+        /* ---- APPLY THEME ---- */
         function applyTheme(name) {
           current = name;
           root.setAttribute("data-theme", name);
           localStorage.setItem("theme", name);
           setActiveDot(name);
+          updateFavicon(THEME_COLORS[name].accent);
         }
 
-        /* ---- MICRO-BLEED GLITCH ---- */
+        /* ---- PART 2: CRITTER BLINK ---- */
+        function blinkCritter(eyeId, fillColor) {
+          var g = document.getElementById(eyeId);
+          if (!g) return;
+          var rects = g.querySelectorAll("rect");
+          rects.forEach(function (r) {
+            r.setAttribute("height", "8");
+            r.setAttribute("fill", fillColor);
+          });
+          setTimeout(function () {
+            rects.forEach(function (r) { r.setAttribute("height", "0"); });
+          }, 150);
+        }
+
+        function scheduleBlinkA() {
+          setTimeout(function () {
+            blinkCritter("eye-a", "var(--accent)");
+            scheduleBlinkA();
+          }, randomBetween(4000, 7000));
+        }
+
+        function scheduleBlinkB() {
+          setTimeout(function () {
+            blinkCritter("eye-b", "var(--secondary)");
+            scheduleBlinkB();
+          }, randomBetween(4000, 7000));
+        }
+
+        scheduleBlinkA();
+        scheduleBlinkB();
+
+        /* ---- PART 3: CHASE ---- */
+        function triggerChase() {
+          if (chaseRunning || reducedMotion.matches) return;
+          chaseRunning = true;
+
+          var duration = randomBetween(2500, 3500);
+          var dir = chaseDirection;
+          chaseDirection *= -1;
+          var vw = window.innerWidth;
+          var startX = dir > 0 ? -60 : vw + 60;
+          var endX = dir > 0 ? vw + 60 : -60;
+          var gap = 60 * dir;
+          var colors = THEME_COLORS[current];
+
+          /* Create runner (critter B) */
+          var runner = document.createElement("div");
+          runner.className = "chase-runner";
+          runner.innerHTML = '<svg viewBox="0 0 36 36" width="36" height="36" fill="none">'
+            + '<path d="M18 4 L32 28 Q32 32 28 32 L8 32 Q4 32 4 28 Z" fill="' + colors.secondary + '"/>'
+            + '<ellipse cx="13" cy="20" rx="3" ry="3.5" fill="white"/>'
+            + '<ellipse cx="23" cy="20" rx="3" ry="3.5" fill="white"/>'
+            + '<circle cx="14" cy="20.5" r="1.8" fill="' + colors.bg + '"/>'
+            + '<circle cx="24" cy="20.5" r="1.8" fill="' + colors.bg + '"/>'
+            + '</svg>';
+          runner.style.left = startX + "px";
+          runner.style.transform = dir < 0 ? "scaleX(-1)" : "";
+
+          /* Create chaser (critter A) */
+          var chaser = document.createElement("div");
+          chaser.className = "chase-runner";
+          chaser.innerHTML = '<svg viewBox="0 0 40 40" width="40" height="40" fill="none">'
+            + '<ellipse cx="20" cy="24" rx="16" ry="14" fill="' + colors.accent + '"/>'
+            + '<ellipse cx="13" cy="20" rx="3.5" ry="4" fill="white"/>'
+            + '<ellipse cx="27" cy="20" rx="3.5" ry="4" fill="white"/>'
+            + '<circle cx="14" cy="20.5" r="2" fill="' + colors.bg + '"/>'
+            + '<circle cx="28" cy="20.5" r="2" fill="' + colors.bg + '"/>'
+            + '</svg>';
+          chaser.style.left = (startX - gap) + "px";
+          chaser.style.transform = dir < 0 ? "scaleX(-1)" : "";
+
+          chaseOverlay.appendChild(runner);
+          chaseOverlay.appendChild(chaser);
+
+          /* Boing sound */
+          try {
+            var ac = new (window.AudioContext || window.webkitAudioContext)();
+            var osc = ac.createOscillator();
+            var gain = ac.createGain();
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(300, ac.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(600, ac.currentTime + 0.1);
+            gain.gain.setValueAtTime(0.06, ac.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.15);
+            osc.connect(gain);
+            gain.connect(ac.destination);
+            osc.start();
+            osc.stop(ac.currentTime + 0.15);
+          } catch (e) {}
+
+          /* Dust puffs */
+          var dustCount = 0;
+          var dustInterval = setInterval(function () {
+            if (dustCount >= 3) { clearInterval(dustInterval); return; }
+            var puff = document.createElement("div");
+            puff.className = "dust-puff";
+            puff.style.width = randomBetween(6, 10) + "px";
+            puff.style.height = puff.style.width;
+            puff.style.bottom = randomBetween(0, 15) + "px";
+            var runnerX = parseFloat(runner.style.left) || 0;
+            puff.style.left = (runnerX - dir * 10) + "px";
+            puff.style.background = colors.secondary;
+            chaseOverlay.appendChild(puff);
+            setTimeout(function () { if (puff.parentNode) puff.remove(); }, 600);
+            dustCount++;
+          }, duration / 4);
+
+          /* Animate */
+          var startTime = performance.now();
+          var hopCount = 0;
+          var leapAt = Math.floor(duration / 333 / 2);
+
+          function animateChase(now) {
+            var elapsed = now - startTime;
+            var t = Math.min(elapsed / duration, 1);
+            var runX = startX + (endX - startX) * t;
+            var chaX = (startX - gap) + (endX - gap - (startX - gap)) * t;
+
+            /* Bouncy hop cycle: ~3 hops/sec */
+            var phase = (elapsed / 333) * Math.PI * 2;
+            var bounce = Math.abs(Math.sin(phase));
+            var sx = 1 + 0.08 * (1 - bounce);
+            var sy = 1 - 0.08 * (1 - bounce) + 0.15 * bounce;
+            var rot = Math.sin(phase) * 3;
+
+            /* Bigger leap mid-crossing */
+            var currentHop = Math.floor(elapsed / 333);
+            var leapBonus = (currentHop === leapAt) ? bounce * 15 : 0;
+
+            var flipBase = dir < 0 ? "scaleX(-1) " : "";
+            runner.style.left = runX + "px";
+            runner.style.transform = flipBase + "translateY(" + (-bounce * 10 - leapBonus) + "px) scaleX(" + sx + ") scaleY(" + sy + ") rotate(" + rot + "deg)";
+
+            chaser.style.left = chaX + "px";
+            var phase2 = ((elapsed - 80) / 333) * Math.PI * 2;
+            var bounce2 = Math.abs(Math.sin(phase2));
+            var sx2 = 1 + 0.06 * (1 - bounce2);
+            var sy2 = 1 - 0.06 * (1 - bounce2) + 0.12 * bounce2;
+            chaser.style.transform = flipBase + "translateY(" + (-bounce2 * 8) + "px) scaleX(" + sx2 + ") scaleY(" + sy2 + ") rotate(" + (Math.sin(phase2) * 2) + "deg)";
+
+            if (t < 1) {
+              requestAnimationFrame(animateChase);
+            } else {
+              runner.remove();
+              chaser.remove();
+              clearInterval(dustInterval);
+              setTimeout(function () { chaseRunning = false; }, 1000);
+            }
+          }
+
+          requestAnimationFrame(animateChase);
+        }
+
+        /* ---- BLEED ---- */
         function performBleed() {
           if (!autoMode || userBusy() || reducedMotion.matches) return;
           if (timeSinceLastEvent() < MIN_GAP) return;
-
           lastEventTime = Date.now();
 
           var next = nextTheme();
@@ -243,18 +447,14 @@ const marqueeText = "SHAKIL MUSTHAFA \u00B7 BUILDER \u00B7 ECONOMIST \u00B7 ";
           bleedSlice.style.borderTop = "2px solid " + colors.accent;
           bleedSlice.style.borderBottom = "2px solid " + colors.accent;
           bleedSlice.style.transform = "translateX(" + offset + "px)";
-          bleedSlice.style.animation = "microBleed " + duration + "ms ease forwards";
           bleedSlice.style.opacity = "0";
 
-          /* Trigger reflow to restart animation */
           void bleedSlice.offsetWidth;
           bleedSlice.style.animation = "none";
           void bleedSlice.offsetWidth;
           bleedSlice.style.animation = "microBleed " + duration + "ms ease forwards";
 
-          /* RGB split on name */
           root.classList.add("bleeding");
-
           glitchOverlay.classList.add("active");
 
           setTimeout(function () {
@@ -274,18 +474,16 @@ const marqueeText = "SHAKIL MUSTHAFA \u00B7 BUILDER \u00B7 ECONOMIST \u00B7 ";
           }, randomBetween(BLEED_MIN, BLEED_MAX));
         }
 
-        /* ---- FULL HOP ---- */
-        function performHop() {
+        /* ---- HOP ---- */
+        function performHop(skipChase) {
           if (userBusy()) return;
           if (timeSinceLastEvent() < MIN_GAP) return;
-
           lastEventTime = Date.now();
-          var target = nextTheme();
 
+          var target = nextTheme();
           root.classList.add("hopping");
 
           if (!reducedMotion.matches) {
-            /* Color the hop slices with next theme */
             var colors = THEME_COLORS[target];
             var slices = glitchOverlay.querySelectorAll(".glitch-slice");
             for (var i = 0; i < slices.length; i++) {
@@ -301,6 +499,11 @@ const marqueeText = "SHAKIL MUSTHAFA \u00B7 BUILDER \u00B7 ECONOMIST \u00B7 ";
             root.classList.remove("hopping");
             glitchOverlay.classList.remove("active");
             glitchTimeout = null;
+
+            /* Chase after hop */
+            if (!skipChase) {
+              setTimeout(function () { triggerChase(); }, 300);
+            }
           }, GLITCH_DURATION);
         }
 
@@ -314,14 +517,8 @@ const marqueeText = "SHAKIL MUSTHAFA \u00B7 BUILDER \u00B7 ECONOMIST \u00B7 ";
         }
 
         function stopAuto() {
-          if (hopTimer) {
-            clearInterval(hopTimer);
-            hopTimer = null;
-          }
-          if (bleedTimer) {
-            clearTimeout(bleedTimer);
-            bleedTimer = null;
-          }
+          if (hopTimer) { clearInterval(hopTimer); hopTimer = null; }
+          if (bleedTimer) { clearTimeout(bleedTimer); bleedTimer = null; }
         }
 
         /* Manual dot click */
@@ -329,13 +526,28 @@ const marqueeText = "SHAKIL MUSTHAFA \u00B7 BUILDER \u00B7 ECONOMIST \u00B7 ";
           dot.addEventListener("click", function () {
             var theme = dot.getAttribute("data-dot");
             if (theme === current) return;
-
             autoMode = false;
             localStorage.setItem("autoTheme", "off");
             updateAutoBtn();
             stopAuto();
 
+            /* Manual switch with chase */
+            lastEventTime = Date.now();
+            root.classList.add("hopping");
+            if (!reducedMotion.matches) {
+              var colors = THEME_COLORS[theme];
+              var slices = glitchOverlay.querySelectorAll(".glitch-slice");
+              for (var i = 0; i < slices.length; i++) slices[i].style.background = colors.bg;
+              glitchOverlay.classList.add("active");
+            }
             applyTheme(theme);
+            if (glitchTimeout) clearTimeout(glitchTimeout);
+            glitchTimeout = setTimeout(function () {
+              root.classList.remove("hopping");
+              glitchOverlay.classList.remove("active");
+              glitchTimeout = null;
+              setTimeout(function () { triggerChase(); }, 300);
+            }, GLITCH_DURATION);
           });
         });
 
@@ -344,16 +556,48 @@ const marqueeText = "SHAKIL MUSTHAFA \u00B7 BUILDER \u00B7 ECONOMIST \u00B7 ";
           autoMode = !autoMode;
           localStorage.setItem("autoTheme", autoMode ? "on" : "off");
           updateAutoBtn();
-          if (autoMode) {
-            startAuto();
-          } else {
-            stopAuto();
+          if (autoMode) { startAuto(); } else { stopAuto(); }
+        });
+
+        /* ---- PART 1: JELLY NAME ---- */
+        var nameEl = document.getElementById("jelly-name");
+        var letters = nameEl.querySelectorAll(".name-letter");
+
+        nameEl.addEventListener("mouseover", function (e) {
+          if (reducedMotion.matches) return;
+          var span = e.target.closest(".name-letter");
+          if (!span) return;
+          span.classList.remove("jelly");
+          void span.offsetWidth;
+          span.classList.add("jelly");
+          setTimeout(function () { span.classList.remove("jelly"); }, 300);
+
+          /* Neighbor wobble */
+          var idx = parseInt(span.getAttribute("data-idx"), 10);
+          letters.forEach(function (l) {
+            var li = parseInt(l.getAttribute("data-idx"), 10);
+            if (li === idx - 1 || li === idx + 1) {
+              l.classList.remove("jelly-neighbor");
+              void l.offsetWidth;
+              l.classList.add("jelly-neighbor");
+              setTimeout(function () { l.classList.remove("jelly-neighbor"); }, 300);
+            }
+          });
+        });
+
+        /* ---- PART 8: EASTER EGG ---- */
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "g" && !e.ctrlKey && !e.metaKey && !e.altKey) {
+            var tag = document.activeElement && document.activeElement.tagName;
+            if (tag === "INPUT" || tag === "TEXTAREA") return;
+            performHop();
           }
         });
 
-        /* Init */
+        /* ---- INIT ---- */
         setActiveDot(current);
         updateAutoBtn();
+        updateFavicon(THEME_COLORS[current].accent);
         if (autoMode) startAuto();
       })();
     </script>
