@@ -21,6 +21,8 @@ const nameLetters = site.name.split("").map((ch, i) => ({
   isSpace: ch === " ",
   index: i,
 }));
+
+const ALL_THEMES = ["wash","brooklyn","bazaar","chrome","brick","hoedown","meadow","cape","crimson","quest","arcade","floss","arcana"];
 ---
 
 <html lang="en">
@@ -32,12 +34,12 @@ const nameLetters = site.name.split("").map((ch, i) => ({
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" id="favicon" />
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Rounded+Mplus+1c:wght@900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Permanent+Marker&family=Fredoka:wght@600&family=Space+Grotesk:wght@700&family=Baloo+2:wght@800&family=Rye&family=Caveat:wght@700&family=Bungee&family=Anton&family=Alfa+Slab+One&family=Press+Start+2P&family=Chewy&family=Cinzel:wght@700&family=Rounded+Mplus+1c:wght@900&display=swap"
       rel="stylesheet"
     />
     <script is:inline>
       (function () {
-        var VALID = ["wash", "brooklyn", "bazaar", "chrome", "brick"];
+        var VALID = ["wash","brooklyn","bazaar","chrome","brick","hoedown","meadow","cape","crimson","quest","arcade","floss","arcana"];
         var t = localStorage.getItem("theme");
         if (t && VALID.indexOf(t) !== -1) {
           document.documentElement.setAttribute("data-theme", t);
@@ -49,12 +51,24 @@ const nameLetters = site.name.split("").map((ch, i) => ({
   </head>
   <body>
     <div class="theme-switcher">
-      <button class="theme-dot" data-dot="wash" aria-label="Wash theme"></button>
-      <button class="theme-dot" data-dot="brooklyn" aria-label="Brooklyn theme"></button>
-      <button class="theme-dot" data-dot="bazaar" aria-label="Bazaar theme"></button>
-      <button class="theme-dot" data-dot="chrome" aria-label="Chrome theme"></button>
-      <button class="theme-dot" data-dot="brick" aria-label="Brick theme"></button>
+      <button class="theme-dot active" id="current-dot" aria-label="Current theme"></button>
       <button class="auto-toggle playing" aria-label="Auto theme" title="auto theme">&#9654;</button>
+      <button class="sound-toggle" aria-label="Toggle sound" title="sound">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+      </button>
+      <button class="auto-toggle" id="expand-btn" aria-label="Show all themes" title="all themes" style="font-size:7px;">&#9660;</button>
+    </div>
+
+    <div class="switcher-tray" id="switcher-tray">
+      {ALL_THEMES.map((t) => (
+        <button class="theme-dot" data-dot={t} aria-label={`${t} theme`} title={t}></button>
+      ))}
+    </div>
+
+    <div class="hint-popup" id="hint-popup">
+      <button class="hint-close" id="hint-close" aria-label="Dismiss">x</button>
+      <div>Not feeling the glitch?</div>
+      <div style="font-size:0.7rem;margin-top:0.3rem;opacity:0.8;">sound lives here</div>
     </div>
 
     <div class="glitch-overlay" aria-hidden="true">
@@ -67,7 +81,7 @@ const nameLetters = site.name.split("").map((ch, i) => ({
     <div class="chase-overlay" aria-hidden="true" id="chase-overlay"></div>
 
     <div class="name-block">
-      <h1 class="big-name font-bubble" aria-label={site.name} id="jelly-name">
+      <h1 class="big-name font-display" aria-label={site.name} id="jelly-name">
         {nameLetters.map((l) =>
           l.isSpace ? (
             <span class="name-space" aria-hidden="true">&nbsp;</span>
@@ -87,11 +101,11 @@ const nameLetters = site.name.split("").map((ch, i) => ({
       ))}
     </div>
 
-    <div class="wave-divider" aria-hidden="true"></div>
+    <div class="wave-divider reveal" aria-hidden="true"></div>
 
-    <div class="section">
+    <div class="section reveal">
       <div class="section-header">
-        <span class="section-number font-bubble">01</span>
+        <span class="section-number font-display">01</span>
         <h2 class="section-title">Notable Work</h2>
       </div>
       <ul class="work-list">
@@ -109,11 +123,11 @@ const nameLetters = site.name.split("").map((ch, i) => ({
       </ul>
     </div>
 
-    <div class="wave-divider" aria-hidden="true"></div>
+    <div class="wave-divider reveal" aria-hidden="true"></div>
 
-    <div class="section">
+    <div class="section reveal">
       <div class="section-header">
-        <span class="section-number font-bubble">02</span>
+        <span class="section-number font-display">02</span>
         <h2 class="section-title">Writing</h2>
       </div>
       <ul class="work-list">
@@ -131,7 +145,7 @@ const nameLetters = site.name.split("").map((ch, i) => ({
       </ul>
     </div>
 
-    <footer>
+    <footer class="reveal">
       <div class="critter-ledge" aria-hidden="true">
         <!-- Acrobat: rounded body, domino mask band, ink outlines -->
         <div class="critter critter-a" id="critter-a">
@@ -174,7 +188,7 @@ const nameLetters = site.name.split("").map((ch, i) => ({
 
     <script is:inline>
       (function () {
-        var THEMES = ["wash", "brooklyn", "bazaar", "chrome", "brick"];
+        var THEMES = ["wash","brooklyn","bazaar","chrome","brick","hoedown","meadow","cape","crimson","quest","arcade","floss","arcana"];
         var HOP_INTERVAL = 40000;
         var GLITCH_DURATION = 500;
         var BLEED_MIN = 10000;
@@ -188,17 +202,30 @@ const nameLetters = site.name.split("").map((ch, i) => ({
           brooklyn: { bg: "#141126", accent: "#FF3E8A", secondary: "#37D0EE", ink: "#F2EDE4" },
           bazaar:   { bg: "#FFF1DC", accent: "#F4772E", secondary: "#E23E7B", ink: "#3B1518" },
           chrome:   { bg: "#EEF1F6", accent: "#E5303E", secondary: "#2E6BFF", ink: "#0A1128" },
-          brick:    { bg: "#FFFFFF", accent: "#D01012", secondary: "#FFCF00", ink: "#1A1A1A" }
+          brick:    { bg: "#FFFFFF", accent: "#D01012", secondary: "#FFCF00", ink: "#1A1A1A" },
+          hoedown:  { bg: "#F6EBD9", accent: "#B3402A", secondary: "#3E5F8A", ink: "#4A2E1A" },
+          meadow:   { bg: "#EDF2E4", accent: "#E0705E", secondary: "#7C9ED9", ink: "#2E3D2A" },
+          cape:     { bg: "#EAF3FF", accent: "#E23636", secondary: "#F2B705", ink: "#101D3C" },
+          crimson:  { bg: "#0B0608", accent: "#C1121F", secondary: "#7A4E8C", ink: "#E8D9DC" },
+          quest:    { bg: "#EFE6D0", accent: "#E0731D", secondary: "#2E8C83", ink: "#25402F" },
+          arcade:   { bg: "#14122B", accent: "#39FF88", secondary: "#FF3DBE", ink: "#D9F5E5" },
+          floss:    { bg: "#FFEFF7", accent: "#FF6FB5", secondary: "#5AC8FA", ink: "#5A2A56" },
+          arcana:   { bg: "#1B1230", accent: "#D9A441", secondary: "#3EC1B0", ink: "#EFE6D2" }
         };
 
         var root = document.documentElement;
-        var dots = document.querySelectorAll(".theme-dot");
-        var autoBtn = document.querySelector(".auto-toggle");
+        var trayDots = document.querySelectorAll("#switcher-tray .theme-dot");
+        var currentDot = document.getElementById("current-dot");
+        var expandBtn = document.getElementById("expand-btn");
+        var switcherTray = document.getElementById("switcher-tray");
+        var autoBtn = document.querySelector(".auto-toggle:not(#expand-btn)");
         var glitchOverlay = document.querySelector(".glitch-overlay");
         var bleedSlice = document.querySelector(".bleed-slice");
         var chaseOverlay = document.getElementById("chase-overlay");
         var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
         var favicon = document.getElementById("favicon");
+        var hintPopup = document.getElementById("hint-popup");
+        var hintCloseBtn = document.getElementById("hint-close");
 
         var current = root.getAttribute("data-theme") || "wash";
         var autoMode = localStorage.getItem("autoTheme") !== "off";
@@ -210,14 +237,52 @@ const nameLetters = site.name.split("").map((ch, i) => ({
         var chaseDirection = 1;
         var rolesFlip = false;
 
+        /* ---- SOUND MODULE ---- */
+        var soundOn = localStorage.getItem("sound") === "on";
+        var audioCtx = null;
+        var soundBtn = document.querySelector(".sound-toggle");
+
+        function ensureAudio() {
+          if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          if (audioCtx.state === "suspended") audioCtx.resume();
+          return audioCtx;
+        }
+
+        function updateSoundBtn() {
+          if (!soundBtn) return;
+          soundBtn.innerHTML = soundOn
+            ? '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>'
+            : '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>';
+          soundBtn.classList.toggle("playing", soundOn);
+        }
+
+        if (soundBtn) {
+          soundBtn.addEventListener("click", function () {
+            soundOn = !soundOn;
+            localStorage.setItem("sound", soundOn ? "on" : "off");
+            if (soundOn) ensureAudio();
+            updateSoundBtn();
+          });
+        }
+        updateSoundBtn();
+
         function currentIndex() { return THEMES.indexOf(current); }
         function nextTheme() { return THEMES[(currentIndex() + 1) % THEMES.length]; }
         function randomBetween(a, b) { return a + Math.floor(Math.random() * (b - a)); }
 
+        function updateCurrentDot() {
+          if (!currentDot) return;
+          var colors = THEME_COLORS[current];
+          if (colors) {
+            currentDot.style.backgroundColor = colors.accent;
+          }
+        }
+
         function setActiveDot(name) {
-          dots.forEach(function (d) {
+          trayDots.forEach(function (d) {
             d.classList.toggle("active", d.getAttribute("data-dot") === name);
           });
+          updateCurrentDot();
         }
 
         function updateAutoBtn() {
@@ -252,8 +317,9 @@ const nameLetters = site.name.split("").map((ch, i) => ({
         }
 
         function playBoing(freqStart, freqEnd, vol) {
+          if (!soundOn) return;
           try {
-            var ac = new (window.AudioContext || window.webkitAudioContext)();
+            var ac = ensureAudio();
             var osc = ac.createOscillator();
             var gain = ac.createGain();
             osc.type = "sine";
@@ -266,6 +332,43 @@ const nameLetters = site.name.split("").map((ch, i) => ({
             osc.start();
             osc.stop(ac.currentTime + 0.15);
           } catch (e) {}
+        }
+
+        function playHopZap() {
+          if (!soundOn) return;
+          try {
+            var ac = ensureAudio();
+            var t = ac.currentTime;
+            var osc = ac.createOscillator();
+            osc.type = "sawtooth";
+            osc.frequency.setValueAtTime(800, t);
+            osc.frequency.exponentialRampToValueAtTime(200, t + 0.15);
+            var gain = ac.createGain();
+            gain.gain.setValueAtTime(0.12, t);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+            osc.connect(gain);
+            gain.connect(ac.destination);
+            osc.start(t);
+            osc.stop(t + 0.3);
+            var bufSize = Math.floor(ac.sampleRate * 0.1);
+            var noiseBuf = ac.createBuffer(1, bufSize, ac.sampleRate);
+            var data = noiseBuf.getChannelData(0);
+            for (var i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
+            var noise = ac.createBufferSource();
+            noise.buffer = noiseBuf;
+            var bp = ac.createBiquadFilter();
+            bp.type = "bandpass";
+            bp.frequency.value = 1200;
+            bp.Q.value = 2;
+            var ng = ac.createGain();
+            ng.gain.setValueAtTime(0.06, t);
+            ng.gain.exponentialRampToValueAtTime(0.001, t + 0.1);
+            noise.connect(bp);
+            bp.connect(ng);
+            ng.connect(ac.destination);
+            noise.start(t);
+            noise.stop(t + 0.1);
+          } catch(e) {}
         }
 
         /* SVG builders */
@@ -308,6 +411,7 @@ const nameLetters = site.name.split("").map((ch, i) => ({
         }
 
         function scheduleBlinkA() {
+          if (reducedMotion.matches) return;
           setTimeout(function () {
             blinkCritter("eye-a", "var(--ink)");
             scheduleBlinkA();
@@ -315,6 +419,7 @@ const nameLetters = site.name.split("").map((ch, i) => ({
         }
 
         function scheduleBlinkB() {
+          if (reducedMotion.matches) return;
           setTimeout(function () {
             blinkCritter("eye-b", "var(--secondary)");
             scheduleBlinkB();
@@ -323,6 +428,28 @@ const nameLetters = site.name.split("").map((ch, i) => ({
 
         scheduleBlinkA();
         scheduleBlinkB();
+
+        /* ---- SWITCHER TRAY ---- */
+        if (expandBtn && switcherTray) {
+          expandBtn.addEventListener("click", function () {
+            switcherTray.classList.toggle("open");
+          });
+
+          document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape" && switcherTray.classList.contains("open")) {
+              switcherTray.classList.remove("open");
+            }
+          });
+
+          document.addEventListener("click", function (e) {
+            if (switcherTray.classList.contains("open") &&
+                !switcherTray.contains(e.target) &&
+                e.target !== expandBtn &&
+                !expandBtn.contains(e.target)) {
+              switcherTray.classList.remove("open");
+            }
+          });
+        }
 
         /* ---- CHASE ---- */
         function triggerChase() {
@@ -647,11 +774,41 @@ const nameLetters = site.name.split("").map((ch, i) => ({
           }, randomBetween(BLEED_MIN, BLEED_MAX));
         }
 
+        /* ---- HINT POPUP ---- */
+        function showHint() {
+          if (!hintPopup) return;
+          if (localStorage.getItem("hintSeen")) return;
+          localStorage.setItem("hintSeen", "1");
+          hintPopup.classList.add("visible");
+          setTimeout(function () {
+            dismissHint();
+          }, 8000);
+        }
+
+        function dismissHint() {
+          if (!hintPopup) return;
+          hintPopup.classList.remove("visible");
+        }
+
+        if (hintCloseBtn) {
+          hintCloseBtn.addEventListener("click", function () {
+            dismissHint();
+          });
+        }
+
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape") {
+            dismissHint();
+          }
+        });
+
         /* ---- HOP ---- */
         function performHop() {
           if (userBusy()) return;
           if (timeSinceLastEvent() < MIN_GAP) return;
           lastEventTime = Date.now();
+
+          playHopZap();
 
           var target = nextTheme();
           root.classList.add("hopping");
@@ -670,7 +827,10 @@ const nameLetters = site.name.split("").map((ch, i) => ({
             root.classList.remove("hopping");
             glitchOverlay.classList.remove("active");
             glitchTimeout = null;
-            setTimeout(function () { triggerChase(); }, 300);
+            setTimeout(function () {
+              triggerChase();
+              showHint();
+            }, 300);
           }, GLITCH_DURATION);
         }
 
@@ -687,7 +847,8 @@ const nameLetters = site.name.split("").map((ch, i) => ({
           if (bleedTimer) { clearTimeout(bleedTimer); bleedTimer = null; }
         }
 
-        dots.forEach(function (dot) {
+        /* ---- TRAY DOT CLICKS ---- */
+        trayDots.forEach(function (dot) {
           dot.addEventListener("click", function () {
             var theme = dot.getAttribute("data-dot");
             if (theme === current) return;
@@ -705,6 +866,7 @@ const nameLetters = site.name.split("").map((ch, i) => ({
               glitchOverlay.classList.add("active");
             }
             applyTheme(theme);
+            if (switcherTray) switcherTray.classList.remove("open");
             if (glitchTimeout) clearTimeout(glitchTimeout);
             glitchTimeout = setTimeout(function () {
               root.classList.remove("hopping");
@@ -755,6 +917,25 @@ const nameLetters = site.name.split("").map((ch, i) => ({
             performHop();
           }
         });
+
+        /* ---- SCROLL REVEAL ---- */
+        if (!reducedMotion.matches) {
+          var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+              if (e.isIntersecting) {
+                e.target.classList.add("visible");
+                observer.unobserve(e.target);
+              }
+            });
+          }, { threshold: 0.1 });
+          document.querySelectorAll(".reveal").forEach(function (el) {
+            observer.observe(el);
+          });
+        } else {
+          document.querySelectorAll(".reveal").forEach(function (el) {
+            el.classList.add("visible");
+          });
+        }
 
         /* ---- INIT ---- */
         setActiveDot(current);

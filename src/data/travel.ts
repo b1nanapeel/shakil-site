@@ -129,7 +129,7 @@ export const travel: TravelEntry[] = [
     caption: "",
   },
   {
-    place: "San Mateo",
+    place: "Newark",
     country: "United States",
     lat: 37.5552,
     lng: -122.0614,
@@ -145,7 +145,7 @@ export const travel: TravelEntry[] = [
     caption: "",
   },
   {
-    place: "San Mateo",
+    place: "Newark Bay Trail",
     country: "United States",
     lat: 37.5321,
     lng: -122.0736,

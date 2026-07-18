@@ -14,12 +14,12 @@ import NavDock from "../components/NavDock.astro";
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Rounded+Mplus+1c:wght@900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Permanent+Marker&family=Fredoka:wght@600&family=Space+Grotesk:wght@700&family=Baloo+2:wght@800&family=Rye&family=Caveat:wght@700&family=Bungee&family=Anton&family=Alfa+Slab+One&family=Press+Start+2P&family=Chewy&family=Cinzel:wght@700&family=Rounded+Mplus+1c:wght@900&display=swap"
       rel="stylesheet"
     />
     <script is:inline>
       (function () {
-        var VALID = ["wash", "brooklyn", "bazaar", "chrome", "brick"];
+        var VALID = ["wash","brooklyn","bazaar","chrome","brick","hoedown","meadow","cape","crimson","quest","arcade","floss","arcana"];
         var t = localStorage.getItem("theme");
         if (t && VALID.indexOf(t) !== -1) {
           document.documentElement.setAttribute("data-theme", t);
@@ -168,6 +168,14 @@ import NavDock from "../components/NavDock.astro";
         bazaar:   { bg: "#FFF1DC", ink: "#3B1518", accent: "#F4772E", globe: "#F5E8D0", land: "#c49a6c", dark: false },
         chrome:   { bg: "#EEF1F6", ink: "#0A1128", accent: "#E5303E", globe: "#E0E4EC", land: "#8890a0", dark: false },
         brick:    { bg: "#FFFFFF", ink: "#1A1A1A", accent: "#D01012", globe: "#F0F0F0", land: "#999999", dark: false },
+        hoedown:  { bg: "#F6EBD9", ink: "#4A2E1A", accent: "#B3402A", globe: "#F0E4D0", land: "#A08060", dark: false },
+        meadow:   { bg: "#EDF2E4", ink: "#2E3D2A", accent: "#E0705E", globe: "#E0EAD8", land: "#7A9A6A", dark: false },
+        cape:     { bg: "#EAF3FF", ink: "#101D3C", accent: "#E23636", globe: "#DDE8F6", land: "#8090B0", dark: false },
+        crimson:  { bg: "#0B0608", ink: "#E8D9DC", accent: "#C1121F", globe: "#150D10", land: "#3A2530", dark: true },
+        quest:    { bg: "#EFE6D0", ink: "#25402F", accent: "#E0731D", globe: "#E4DBC4", land: "#8A9A6A", dark: false },
+        arcade:   { bg: "#14122B", ink: "#D9F5E5", accent: "#39FF88", globe: "#1A1835", land: "#2A3858", dark: true },
+        floss:    { bg: "#FFEFF7", ink: "#5A2A56", accent: "#FF6FB5", globe: "#F8E4F0", land: "#C090B0", dark: false },
+        arcana:   { bg: "#1B1230", ink: "#EFE6D2", accent: "#D9A441", globe: "#201838", land: "#3A3058", dark: true },
       };
 
       const DOT_COLOR = "#E5303E";
