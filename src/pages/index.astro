@@ -22,7 +22,7 @@ const nameLetters = site.name.split("").map((ch, i) => ({
   index: i,
 }));
 
-const ALL_THEMES = ["wash","brooklyn","bazaar","chrome","brick","hoedown","meadow","cape","crimson","quest","arcade","floss","arcana"];
+const ALL_THEMES = ["wash","brooklyn","bazaar","chrome","brick","hoedown","meadow","cape","crimson","quest","arcade","floss","arcana","noir","clouds","maze","handheld","soda","cinema","volt","tropic","frost","press","terminal","reverie","ember","grove","mirage","depths"];
 ---
 
 <html lang="en">
@@ -34,12 +34,12 @@ const ALL_THEMES = ["wash","brooklyn","bazaar","chrome","brick","hoedown","meado
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" id="favicon" />
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Permanent+Marker&family=Fredoka:wght@600&family=Space+Grotesk:wght@700&family=Baloo+2:wght@800&family=Rye&family=Caveat:wght@700&family=Bungee&family=Anton&family=Alfa+Slab+One&family=Press+Start+2P&family=Chewy&family=Cinzel:wght@700&family=Rounded+Mplus+1c:wght@900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Permanent+Marker&family=Fredoka:wght@600&family=Space+Grotesk:wght@700&family=Baloo+2:wght@800&family=Rye&family=Caveat:wght@700&family=Bungee&family=Anton&family=Alfa+Slab+One&family=Press+Start+2P&family=Chewy&family=Cinzel:wght@700&family=Rounded+Mplus+1c:wght@900&family=Special+Elite&family=Pixelify+Sans&family=Silkscreen&family=VT323&family=Pacifico&family=Bebas+Neue&family=Orbitron:wght@700&family=Lilita+One&family=Comfortaa:wght@700&family=Playfair+Display:wght@700&family=Share+Tech+Mono&family=Zen+Maru+Gothic:wght@700&family=Philosopher:wght@700&family=Amatic+SC:wght@700&family=Righteous&family=Baloo+Paaji+2:wght@700&display=swap"
       rel="stylesheet"
     />
     <script is:inline>
       (function () {
-        var VALID = ["wash","brooklyn","bazaar","chrome","brick","hoedown","meadow","cape","crimson","quest","arcade","floss","arcana"];
+        var VALID = ["wash","brooklyn","bazaar","chrome","brick","hoedown","meadow","cape","crimson","quest","arcade","floss","arcana","noir","clouds","maze","handheld","soda","cinema","volt","tropic","frost","press","terminal","reverie","ember","grove","mirage","depths"];
         var t = localStorage.getItem("theme");
         if (t && VALID.indexOf(t) !== -1) {
           document.documentElement.setAttribute("data-theme", t);
@@ -188,11 +188,11 @@ const ALL_THEMES = ["wash","brooklyn","bazaar","chrome","brick","hoedown","meado
 
     <script is:inline>
       (function () {
-        var THEMES = ["wash","brooklyn","bazaar","chrome","brick","hoedown","meadow","cape","crimson","quest","arcade","floss","arcana"];
-        var HOP_INTERVAL = 20000;
+        var THEMES = ["wash","brooklyn","bazaar","chrome","brick","hoedown","meadow","cape","crimson","quest","arcade","floss","arcana","noir","clouds","maze","handheld","soda","cinema","volt","tropic","frost","press","terminal","reverie","ember","grove","mirage","depths"];
+        var HOP_INTERVAL = 40000;
         var GLITCH_DURATION = 650;
-        var BLEED_MIN = 9000;
-        var BLEED_MAX = 12000;
+        var BLEED_MIN = 10000;
+        var BLEED_MAX = 14000;
         var BLEED_DURATION_MIN = 200;
         var BLEED_DURATION_MAX = 300;
         var MIN_GAP = 7000;
@@ -210,7 +210,23 @@ const ALL_THEMES = ["wash","brooklyn","bazaar","chrome","brick","hoedown","meado
           quest:    { bg: "#EFE6D0", accent: "#E0731D", secondary: "#2E8C83", ink: "#25402F" },
           arcade:   { bg: "#14122B", accent: "#39FF88", secondary: "#FF3DBE", ink: "#D9F5E5" },
           floss:    { bg: "#FFEFF7", accent: "#FF6FB5", secondary: "#5AC8FA", ink: "#5A2A56" },
-          arcana:   { bg: "#1B1230", accent: "#D9A441", secondary: "#3EC1B0", ink: "#EFE6D2" }
+          arcana:   { bg: "#1B1230", accent: "#D9A441", secondary: "#3EC1B0", ink: "#EFE6D2" },
+          noir:     { bg: "#101010", accent: "#FFFFFF", secondary: "#8A8A8A", ink: "#E8E8E8" },
+          clouds:   { bg: "#8ED8F8", accent: "#F8D848", secondary: "#FFFFFF", ink: "#1E5E3A" },
+          maze:     { bg: "#000000", accent: "#FFE737", secondary: "#FFB8DE", ink: "#B8C4FF" },
+          handheld: { bg: "#C4CFA1", accent: "#4A6B3A", secondary: "#8BA26F", ink: "#1F2A1B" },
+          soda:     { bg: "#FFF6E9", accent: "#D6382C", secondary: "#2E8C8C", ink: "#3A1F14" },
+          cinema:   { bg: "#0A0A0A", accent: "#DA2B35", secondary: "#F5B841", ink: "#EDEDED" },
+          volt:     { bg: "#191233", accent: "#3EE8FF", secondary: "#B44BFF", ink: "#EDEAFF" },
+          tropic:   { bg: "#FFE8D1", accent: "#E8503A", secondary: "#1FA0A6", ink: "#31402A" },
+          frost:    { bg: "#EFF6FB", accent: "#4A9ED9", secondary: "#C24A6B", ink: "#1D3444" },
+          press:    { bg: "#F4F1E8", accent: "#C0392B", secondary: "#2C5F8A", ink: "#1A1A1A" },
+          terminal: { bg: "#060A06", accent: "#39FF14", secondary: "#1E8C3C", ink: "#C8F5C8" },
+          reverie:  { bg: "#DCEBF7", accent: "#E8B84B", secondary: "#E8A0B4", ink: "#33475C" },
+          ember:    { bg: "#1C0E0C", accent: "#E8501F", secondary: "#F2A93B", ink: "#F2E3D0" },
+          grove:    { bg: "#152418", accent: "#5FBF6E", secondary: "#D9B54A", ink: "#DCE8D8" },
+          mirage:   { bg: "#1A1038", accent: "#FF5E8A", secondary: "#FF9E4A", ink: "#F5E9DD" },
+          depths:   { bg: "#0A1626", accent: "#2EE6C8", secondary: "#E86A5E", ink: "#D8EAE6" }
         };
 
         var root = document.documentElement;

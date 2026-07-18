@@ -14,12 +14,12 @@ import NavDock from "../components/NavDock.astro";
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Permanent+Marker&family=Fredoka:wght@600&family=Space+Grotesk:wght@700&family=Baloo+2:wght@800&family=Rye&family=Caveat:wght@700&family=Bungee&family=Anton&family=Alfa+Slab+One&family=Press+Start+2P&family=Chewy&family=Cinzel:wght@700&family=Rounded+Mplus+1c:wght@900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Permanent+Marker&family=Fredoka:wght@600&family=Space+Grotesk:wght@700&family=Baloo+2:wght@800&family=Rye&family=Caveat:wght@700&family=Bungee&family=Anton&family=Alfa+Slab+One&family=Press+Start+2P&family=Chewy&family=Cinzel:wght@700&family=Rounded+Mplus+1c:wght@900&family=Special+Elite&family=Pixelify+Sans&family=Silkscreen&family=VT323&family=Pacifico&family=Bebas+Neue&family=Orbitron:wght@700&family=Lilita+One&family=Comfortaa:wght@700&family=Playfair+Display:wght@700&family=Share+Tech+Mono&family=Zen+Maru+Gothic:wght@700&family=Philosopher:wght@700&family=Amatic+SC:wght@700&family=Righteous&family=Baloo+Paaji+2:wght@700&display=swap"
       rel="stylesheet"
     />
     <script is:inline>
       (function () {
-        var VALID = ["wash","brooklyn","bazaar","chrome","brick","hoedown","meadow","cape","crimson","quest","arcade","floss","arcana"];
+        var VALID = ["wash","brooklyn","bazaar","chrome","brick","hoedown","meadow","cape","crimson","quest","arcade","floss","arcana","noir","clouds","maze","handheld","soda","cinema","volt","tropic","frost","press","terminal","reverie","ember","grove","mirage","depths"];
         var t = localStorage.getItem("theme");
         if (t && VALID.indexOf(t) !== -1) {
           document.documentElement.setAttribute("data-theme", t);
@@ -176,6 +176,22 @@ import NavDock from "../components/NavDock.astro";
         arcade:   { bg: "#14122B", ink: "#D9F5E5", accent: "#39FF88", globe: "#1A1835", land: "#2A3858", dark: true },
         floss:    { bg: "#FFEFF7", ink: "#5A2A56", accent: "#FF6FB5", globe: "#F8E4F0", land: "#C090B0", dark: false },
         arcana:   { bg: "#1B1230", ink: "#EFE6D2", accent: "#D9A441", globe: "#201838", land: "#3A3058", dark: true },
+        noir:     { bg: "#101010", ink: "#E8E8E8", accent: "#FFFFFF", globe: "#181818", land: "#404040", dark: true },
+        clouds:   { bg: "#8ED8F8", ink: "#1E5E3A", accent: "#F8D848", globe: "#A0E0F8", land: "#4A9060", dark: false },
+        maze:     { bg: "#000000", ink: "#B8C4FF", accent: "#FFE737", globe: "#0A0A18", land: "#2A2A50", dark: true },
+        handheld: { bg: "#C4CFA1", ink: "#1F2A1B", accent: "#4A6B3A", globe: "#B8C098", land: "#5A7A4A", dark: false },
+        soda:     { bg: "#FFF6E9", ink: "#3A1F14", accent: "#D6382C", globe: "#F8ECD8", land: "#B0886A", dark: false },
+        cinema:   { bg: "#0A0A0A", ink: "#EDEDED", accent: "#DA2B35", globe: "#151515", land: "#3A3A3A", dark: true },
+        volt:     { bg: "#191233", ink: "#EDEAFF", accent: "#3EE8FF", globe: "#1E1840", land: "#3A3060", dark: true },
+        tropic:   { bg: "#FFE8D1", ink: "#31402A", accent: "#E8503A", globe: "#F8DCC0", land: "#7A9060", dark: false },
+        frost:    { bg: "#EFF6FB", ink: "#1D3444", accent: "#4A9ED9", globe: "#E4EEF6", land: "#7090A8", dark: false },
+        press:    { bg: "#F4F1E8", ink: "#1A1A1A", accent: "#C0392B", globe: "#EAE6D8", land: "#909090", dark: false },
+        terminal: { bg: "#060A06", ink: "#C8F5C8", accent: "#39FF14", globe: "#0A120A", land: "#1A3A1A", dark: true },
+        reverie:  { bg: "#DCEBF7", ink: "#33475C", accent: "#E8B84B", globe: "#D0E0F0", land: "#8098B0", dark: false },
+        ember:    { bg: "#1C0E0C", ink: "#F2E3D0", accent: "#E8501F", globe: "#201210", land: "#4A2A20", dark: true },
+        grove:    { bg: "#152418", ink: "#DCE8D8", accent: "#5FBF6E", globe: "#1A2E20", land: "#2A4A2A", dark: true },
+        mirage:   { bg: "#1A1038", ink: "#F5E9DD", accent: "#FF5E8A", globe: "#201840", land: "#3A2858", dark: true },
+        depths:   { bg: "#0A1626", ink: "#D8EAE6", accent: "#2EE6C8", globe: "#0E1A2E", land: "#1A3040", dark: true },
       };
 
       const DOT_COLOR = "#E5303E";
