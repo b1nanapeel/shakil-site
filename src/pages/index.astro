@@ -3,6 +3,7 @@ import { site } from "../data/site";
 import { work } from "../data/work";
 import { writing } from "../data/writing";
 import "../styles/global.css";
+import NavDock from "../components/NavDock.astro";
 
 const buildDate = new Date().toLocaleDateString("en-US", {
   year: "numeric",
@@ -130,14 +131,6 @@ const nameLetters = site.name.split("").map((ch, i) => ({
       </ul>
     </div>
 
-    <!-- Globe link -->
-    <div class="section">
-      <a href="/globe" class="section-header" style="text-decoration:none;color:inherit;">
-        <span class="section-number font-bubble">03</span>
-        <h2 class="section-title">Globe</h2>
-      </a>
-    </div>
-
     <footer>
       <div class="critter-ledge" aria-hidden="true">
         <!-- Acrobat: rounded body, domino mask band, ink outlines -->
@@ -176,6 +169,8 @@ const nameLetters = site.name.split("").map((ch, i) => ({
       <a href={`mailto:${site.email}`}>{site.email}</a>
       <span class="footer-hint">press g</span>
     </footer>
+
+    <NavDock current="home" />
 
     <script is:inline>
       (function () {

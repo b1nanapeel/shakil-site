@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import { site } from "../data/site";
 import { travel } from "../data/travel";
+import NavDock from "../components/NavDock.astro";
 ---
 
 <html lang="en">
@@ -34,28 +35,6 @@ import { travel } from "../data/travel";
         margin: 0;
         overflow: hidden;
         height: 100vh;
-      }
-
-      .globe-nav {
-        position: fixed;
-        top: 1.25rem;
-        left: 1.25rem;
-        z-index: 20;
-        display: flex;
-        align-items: baseline;
-        gap: 0.75rem;
-        text-decoration: none;
-        color: var(--ink);
-      }
-
-      .globe-nav:hover { opacity: 0.7; }
-
-      .globe-nav .section-number {
-        font-size: 1.4rem;
-      }
-
-      .globe-nav .section-title {
-        font-size: 0.9rem;
       }
 
       #globe-container {
@@ -157,20 +136,10 @@ import { travel } from "../data/travel";
         }
       }
 
-      .globe-nav-link {
-        text-decoration: none;
-        color: inherit;
-        display: flex;
-        align-items: baseline;
-        gap: 0.75rem;
-      }
     </style>
   </head>
   <body>
-    <a href="/" class="globe-nav globe-nav-link">
-      <span class="section-number font-bubble">00</span>
-      <span class="section-title">Home</span>
-    </a>
+    <NavDock current="globe" />
 
     <div id="globe-container"></div>
 
