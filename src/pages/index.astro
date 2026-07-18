@@ -9,6 +9,13 @@ const buildDate = new Date().toLocaleDateString("en-US", {
   month: "long",
   day: "numeric",
 });
+
+const now = new Date();
+const hours = now.getHours();
+const greeting =
+  hours < 12 ? "Good morning" : hours < 18 ? "Good afternoon" : "Good evening";
+
+const marqueeText = "SHAKIL MUSTHAFA \u00B7 BUILDER \u00B7 ECONOMIST \u00B7 ";
 ---
 
 <html lang="en">
@@ -18,53 +25,258 @@ const buildDate = new Date().toLocaleDateString("en-US", {
     <title>{site.name}</title>
     <meta name="description" content={`${site.name} - personal site`} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com"
+      crossorigin
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rounded+Mplus+1c:wght@900&display=swap"
+      rel="stylesheet"
+    />
+    <script is:inline>
+      (function () {
+        var t = localStorage.getItem("theme");
+        if (t && ["sunrise", "pop", "midnight"].indexOf(t) !== -1) {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      })();
+    </script>
   </head>
   <body>
-    <h1>{site.name}</h1>
-    <p class="updated">Updated {buildDate}</p>
+    <!-- Theme Switcher -->
+    <div class="theme-switcher">
+      <button
+        class="theme-dot active"
+        data-dot="sunrise"
+        aria-label="Sunrise theme"
+      ></button>
+      <button
+        class="theme-dot"
+        data-dot="pop"
+        aria-label="Pop theme"
+      ></button>
+      <button
+        class="theme-dot"
+        data-dot="midnight"
+        aria-label="Midnight theme"
+      ></button>
+      <button
+        class="auto-toggle playing"
+        aria-label="Auto theme"
+        title="auto theme"
+      >&#9654;</button>
+    </div>
 
-    <p set:html={site.bio} />
+    <!-- Glitch Overlay -->
+    <div class="glitch-overlay" aria-hidden="true">
+      <div class="glitch-slice glitch-slice-1"></div>
+      <div class="glitch-slice glitch-slice-2"></div>
+      <div class="glitch-slice glitch-slice-3"></div>
+    </div>
 
+    <!-- Name -->
+    <div class="name-block">
+      <h1 class="big-name font-bubble">{site.name}</h1>
+    </div>
+    <p class="updated">{greeting}. Updated {buildDate}.</p>
+
+    <!-- Bio -->
+    <p class="bio" set:html={site.bio} />
+
+    <!-- Links -->
     <div class="links">
       {site.links.map((link) => (
-        <a href={link.url}>{link.label}</a>
+        <a href={link.url} class="pill">{link.label}</a>
       ))}
     </div>
 
-    <h2>Notable Work</h2>
-    <ul class="work-list">
-      {work.map((entry) => (
-        <li>
-          {entry.url ? (
-            <a href={entry.url} class="work-name">{entry.name}</a>
-          ) : (
-            <span class="work-name">{entry.name}</span>
-          )}
-          <span class="work-date"> ({entry.date})</span>
-          <br />
-          <span class="work-desc">{entry.description}</span>
-        </li>
-      ))}
-    </ul>
+    <!-- Marquee -->
+    <div class="marquee-band" aria-hidden="true">
+      <div class="marquee-track">
+        <span>{marqueeText}</span>
+        <span>{marqueeText}</span>
+        <span>{marqueeText}</span>
+        <span>{marqueeText}</span>
+        <span>{marqueeText}</span>
+        <span>{marqueeText}</span>
+      </div>
+    </div>
 
-    <h2>Writing</h2>
-    <ul class="work-list">
-      {writing.map((entry) => (
-        <li>
-          {entry.url ? (
-            <a href={entry.url} class="work-name">{entry.name}</a>
-          ) : (
-            <span class="work-name">{entry.name}</span>
-          )}
-          <span class="work-date"> ({entry.date})</span>
-          <br />
-          <span class="work-desc">{entry.description}</span>
-        </li>
-      ))}
-    </ul>
+    <!-- Notable Work -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-number font-bubble">01</span>
+        <h2 class="section-title">Notable Work</h2>
+      </div>
+      <ul class="work-list">
+        {work.map((entry) => (
+          <li>
+            {entry.url ? (
+              <a href={entry.url} class="work-name">{entry.name}</a>
+            ) : (
+              <span class="work-name">{entry.name}</span>
+            )}
+            <span class="work-date"> ({entry.date})</span>
+            <span class="work-desc">{entry.description}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
 
+    <!-- Writing -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-number font-bubble">02</span>
+        <h2 class="section-title">Writing</h2>
+      </div>
+      <ul class="work-list">
+        {writing.map((entry) => (
+          <li>
+            {entry.url ? (
+              <a href={entry.url} class="work-name">{entry.name}</a>
+            ) : (
+              <span class="work-name">{entry.name}</span>
+            )}
+            <span class="work-date"> ({entry.date})</span>
+            <span class="work-desc">{entry.description}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <!-- Footer -->
     <footer>
       <a href={`mailto:${site.email}`}>{site.email}</a>
     </footer>
+
+    <script is:inline>
+      (function () {
+        var THEMES = ["sunrise", "pop", "midnight"];
+        var HOP_INTERVAL = 40000;
+        var GLITCH_DURATION = 500;
+
+        var root = document.documentElement;
+        var dots = document.querySelectorAll(".theme-dot");
+        var autoBtn = document.querySelector(".auto-toggle");
+        var glitchOverlay = document.querySelector(".glitch-overlay");
+        var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+        /* State */
+        var current = root.getAttribute("data-theme") || "sunrise";
+        var autoMode = localStorage.getItem("autoTheme") !== "off";
+        var hopTimer = null;
+        var glitchTimeout = null;
+
+        /* Helpers */
+        function currentIndex() {
+          return THEMES.indexOf(current);
+        }
+
+        function nextTheme() {
+          return THEMES[(currentIndex() + 1) % THEMES.length];
+        }
+
+        function setActiveDot(name) {
+          dots.forEach(function (d) {
+            d.classList.toggle("active", d.getAttribute("data-dot") === name);
+          });
+        }
+
+        function updateAutoBtn() {
+          autoBtn.classList.toggle("playing", autoMode);
+          autoBtn.innerHTML = autoMode ? "&#9654;" : "&#9646;&#9646;";
+        }
+
+        function userBusy() {
+          var sel = window.getSelection();
+          if (sel && sel.toString().length > 0) return true;
+          if (document.activeElement && document.activeElement.tagName === "INPUT") return true;
+          if (document.activeElement && document.activeElement.tagName === "TEXTAREA") return true;
+          return false;
+        }
+
+        /* Apply theme (no glitch) */
+        function applyTheme(name) {
+          current = name;
+          root.setAttribute("data-theme", name);
+          localStorage.setItem("theme", name);
+          setActiveDot(name);
+        }
+
+        /* Glitch hop */
+        function performHop() {
+          if (userBusy()) return;
+
+          var target = nextTheme();
+
+          /* Add hopping class for extended transitions */
+          root.classList.add("hopping");
+
+          /* Show glitch overlay (skipped if reduced motion) */
+          if (!reducedMotion.matches) {
+            glitchOverlay.classList.add("active");
+          }
+
+          /* Swap the theme (colors crossfade via CSS transitions) */
+          applyTheme(target);
+
+          /* Clean up after transition */
+          if (glitchTimeout) clearTimeout(glitchTimeout);
+          glitchTimeout = setTimeout(function () {
+            root.classList.remove("hopping");
+            glitchOverlay.classList.remove("active");
+            glitchTimeout = null;
+          }, GLITCH_DURATION);
+        }
+
+        /* Auto timer */
+        function startAuto() {
+          stopAuto();
+          hopTimer = setInterval(function () {
+            if (autoMode) performHop();
+          }, HOP_INTERVAL);
+        }
+
+        function stopAuto() {
+          if (hopTimer) {
+            clearInterval(hopTimer);
+            hopTimer = null;
+          }
+        }
+
+        /* Manual dot click: switch theme, disable auto */
+        dots.forEach(function (dot) {
+          dot.addEventListener("click", function () {
+            var theme = dot.getAttribute("data-dot");
+            if (theme === current) return;
+
+            autoMode = false;
+            localStorage.setItem("autoTheme", "off");
+            updateAutoBtn();
+            stopAuto();
+
+            applyTheme(theme);
+          });
+        });
+
+        /* Auto toggle */
+        autoBtn.addEventListener("click", function () {
+          autoMode = !autoMode;
+          localStorage.setItem("autoTheme", autoMode ? "on" : "off");
+          updateAutoBtn();
+          if (autoMode) {
+            startAuto();
+          } else {
+            stopAuto();
+          }
+        });
+
+        /* Init */
+        setActiveDot(current);
+        updateAutoBtn();
+        if (autoMode) startAuto();
+      })();
+    </script>
   </body>
 </html>

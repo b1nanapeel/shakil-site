@@ -1,3 +1,51 @@
+/* ============================================
+   MULTIVERSE THEME SYSTEM
+   ============================================ */
+
+/* SUNRISE (default) */
+:root,
+[data-theme="sunrise"] {
+  --bg: #FFF8EC;
+  --ink: #1a1810;
+  --ink-muted: #6b6456;
+  --accent: #F7C948;
+  --secondary: #E5484D;
+  --halftone: rgba(26, 24, 16, 0.04);
+  --card-shadow: #F7C948;
+  --marquee-bg: #1a1810;
+  --marquee-fg: #FFF8EC;
+}
+
+/* POP */
+[data-theme="pop"] {
+  --bg: #F3F0FF;
+  --ink: #1B1340;
+  --ink-muted: #5B5394;
+  --accent: #E93D82;
+  --secondary: #00C2D7;
+  --halftone: rgba(27, 19, 64, 0.04);
+  --card-shadow: #E93D82;
+  --marquee-bg: #1B1340;
+  --marquee-fg: #F3F0FF;
+}
+
+/* MIDNIGHT */
+[data-theme="midnight"] {
+  --bg: #0E0D16;
+  --ink: #F0ECE0;
+  --ink-muted: #9994A8;
+  --accent: #FF4FA3;
+  --secondary: #8AFF80;
+  --halftone: rgba(240, 236, 224, 0.03);
+  --card-shadow: #FF4FA3;
+  --marquee-bg: #F0ECE0;
+  --marquee-fg: #0E0D16;
+}
+
+/* ============================================
+   RESET
+   ============================================ */
+
 *,
 *::before,
 *::after {
@@ -6,83 +54,558 @@
   box-sizing: border-box;
 }
 
+/* ============================================
+   BASE
+   ============================================ */
+
 html {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
     sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
   font-size: 16px;
   line-height: 1.7;
-  color: #1a1a1a;
-  background: #fafafa;
+  color: var(--ink);
+  background: var(--bg);
   -webkit-font-smoothing: antialiased;
+  transition: background 250ms ease, color 250ms ease;
+}
+
+/* During a dimension hop, extend transition to 500ms for smooth crossfade */
+html.hopping {
+  transition: background 500ms ease, color 500ms ease;
 }
 
 body {
-  max-width: 650px;
+  max-width: 680px;
   margin: 0 auto;
-  padding: 4rem 1.5rem;
+  padding: 5rem 1.5rem 3rem;
 }
 
-h1 {
-  font-size: 1.4rem;
-  font-weight: 600;
+/* ============================================
+   FONTS: bubble display + clean body
+   ============================================ */
+
+.font-bubble {
+  font-family: "Rounded Mplus 1c", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  font-weight: 900;
+}
+
+/* ============================================
+   THEME SWITCHER
+   ============================================ */
+
+.theme-switcher {
+  position: fixed;
+  top: 1.25rem;
+  right: 1.25rem;
+  display: flex;
+  gap: 0.5rem;
+  z-index: 100;
+  align-items: center;
+}
+
+.theme-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    border-color 200ms ease;
+  display: block;
+  padding: 0;
+  background: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.theme-dot:hover {
+  transform: scale(1.3);
+}
+
+.theme-dot[data-dot="sunrise"] {
+  background-color: #F7C948;
+}
+
+.theme-dot[data-dot="pop"] {
+  background-color: #E93D82;
+}
+
+.theme-dot[data-dot="midnight"] {
+  background-color: #FF4FA3;
+}
+
+.theme-dot.active {
+  width: 20px;
+  height: 20px;
+  border-color: var(--ink);
+  transform: scale(1);
+}
+
+.theme-dot.active:hover {
+  transform: scale(1.15);
+}
+
+/* Auto-mode toggle */
+.auto-toggle {
+  width: 18px;
+  height: 18px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  background: var(--ink);
+  color: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin-left: 0.25rem;
+  font-size: 9px;
+  line-height: 1;
+  transition: transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    background 200ms ease, color 200ms ease, opacity 200ms ease;
+  opacity: 0.6;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.auto-toggle:hover {
+  transform: scale(1.3);
+  opacity: 1;
+}
+
+.auto-toggle.playing {
+  opacity: 1;
+}
+
+/* ============================================
+   GLITCH OVERLAY
+   ============================================ */
+
+.glitch-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.glitch-overlay.active {
+  opacity: 0.85;
+}
+
+/* Horizontal slice bands */
+.glitch-slice {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: var(--bg);
+  opacity: 0;
+}
+
+.glitch-slice-1 {
+  top: 18%;
+  height: 30px;
+}
+
+.glitch-slice-2 {
+  top: 52%;
+  height: 20px;
+}
+
+.glitch-slice-3 {
+  top: 78%;
+  height: 40px;
+}
+
+html.hopping .glitch-overlay.active .glitch-slice-1 {
+  animation: sliceShift1 500ms ease forwards;
+}
+
+html.hopping .glitch-overlay.active .glitch-slice-2 {
+  animation: sliceShift2 500ms ease forwards;
+}
+
+html.hopping .glitch-overlay.active .glitch-slice-3 {
+  animation: sliceShift3 500ms ease forwards;
+}
+
+/* Each slice: appear, shift sideways briefly, disappear.
+   Single luminance change (transparent -> visible -> transparent). */
+@keyframes sliceShift1 {
+  0% { opacity: 0; transform: translateX(0); }
+  10% { opacity: 0.7; transform: translateX(6px); }
+  30% { opacity: 0.7; transform: translateX(6px); }
+  40% { opacity: 0; transform: translateX(0); }
+  100% { opacity: 0; transform: translateX(0); }
+}
+
+@keyframes sliceShift2 {
+  0% { opacity: 0; transform: translateX(0); }
+  25% { opacity: 0; transform: translateX(0); }
+  35% { opacity: 0.6; transform: translateX(-8px); }
+  50% { opacity: 0.6; transform: translateX(-8px); }
+  60% { opacity: 0; transform: translateX(0); }
+  100% { opacity: 0; transform: translateX(0); }
+}
+
+@keyframes sliceShift3 {
+  0% { opacity: 0; transform: translateX(0); }
+  50% { opacity: 0; transform: translateX(0); }
+  60% { opacity: 0.5; transform: translateX(4px); }
+  75% { opacity: 0.5; transform: translateX(4px); }
+  85% { opacity: 0; transform: translateX(0); }
+  100% { opacity: 0; transform: translateX(0); }
+}
+
+/* RGB split on name and section numbers during hop */
+html.hopping .big-name {
+  animation: rgbSplitName 500ms ease forwards;
+}
+
+html.hopping .section-number {
+  animation: rgbSplitNumber 500ms ease forwards;
+}
+
+@keyframes rgbSplitName {
+  0% { text-shadow: 1px 1px 0 var(--accent); }
+  15% { text-shadow: 3px -2px 0 var(--accent), -2px 2px 0 var(--secondary); }
+  40% { text-shadow: 3px -2px 0 var(--accent), -2px 2px 0 var(--secondary); }
+  60% { text-shadow: 1px 1px 0 var(--accent); }
+  100% { text-shadow: 1px 1px 0 var(--accent); }
+}
+
+@keyframes rgbSplitNumber {
+  0% { text-shadow: none; }
+  15% { text-shadow: 2px -2px 0 var(--accent), -2px 1px 0 var(--secondary); }
+  40% { text-shadow: 2px -2px 0 var(--accent), -2px 1px 0 var(--secondary); }
+  60% { text-shadow: none; }
+  100% { text-shadow: none; }
+}
+
+/* Extend transitions on themed elements during hop */
+html.hopping .marquee-band {
+  transition: background 500ms ease, color 500ms ease;
+}
+
+html.hopping .pill {
+  transition: border-color 500ms ease, color 500ms ease,
+    background 200ms ease, transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+html.hopping footer {
+  transition: border-color 500ms ease;
+}
+
+html.hopping .auto-toggle {
+  transition: background 500ms ease, color 500ms ease,
+    transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 200ms ease;
+}
+
+/* ============================================
+   NAME / HERO
+   ============================================ */
+
+.name-block {
+  position: relative;
   margin-bottom: 0.25rem;
 }
 
-h2 {
-  font-size: 1rem;
-  font-weight: 600;
-  margin-top: 2.5rem;
-  margin-bottom: 1rem;
+.name-block::before {
+  content: "";
+  position: absolute;
+  top: -1rem;
+  left: -1.5rem;
+  right: -1.5rem;
+  bottom: -0.5rem;
+  background: radial-gradient(circle, var(--halftone) 1px, transparent 1px);
+  background-size: 8px 8px;
+  pointer-events: none;
+  z-index: 0;
 }
 
-p {
-  margin-bottom: 1rem;
-}
-
-a {
-  color: inherit;
-  text-decoration: underline;
-}
-
-a:hover {
-  opacity: 0.7;
+.big-name {
+  font-size: clamp(2.5rem, 6vw, 3.8rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  position: relative;
+  z-index: 1;
+  text-shadow: 1px 1px 0 var(--accent);
 }
 
 .updated {
   font-size: 0.85rem;
-  color: #666;
+  color: var(--ink-muted);
   margin-bottom: 1.5rem;
+  margin-top: 0.5rem;
 }
+
+/* ============================================
+   BIO
+   ============================================ */
+
+.bio {
+  margin-bottom: 1.25rem;
+  font-size: 1.05rem;
+}
+
+.bio a {
+  color: var(--secondary);
+  text-decoration: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 4'%3E%3Cpath d='M0 3 Q5 0 10 3 Q15 6 20 3' fill='none' stroke='currentColor' stroke-width='1'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-position: 0 100%;
+  background-size: 20px 4px;
+  padding-bottom: 2px;
+  transition: color 250ms ease;
+}
+
+.bio a:hover {
+  color: var(--accent);
+}
+
+/* ============================================
+   PILL LINKS
+   ============================================ */
 
 .links {
   display: flex;
-  gap: 1.25rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
   margin-bottom: 0.5rem;
 }
+
+.pill {
+  display: inline-block;
+  padding: 0.35rem 1rem;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: none;
+  transition: transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    background 200ms ease, color 200ms ease, border-color 200ms ease;
+}
+
+.pill:hover {
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
+  transform: scale(1.08);
+}
+
+/* ============================================
+   MARQUEE
+   ============================================ */
+
+.marquee-band {
+  background: var(--marquee-bg);
+  color: var(--marquee-fg);
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 0.6rem 0;
+  margin: 2.5rem -1.5rem;
+  position: relative;
+  transition: background 250ms ease, color 250ms ease;
+}
+
+.marquee-band::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, var(--halftone) 1px, transparent 1px);
+  background-size: 6px 6px;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.marquee-track {
+  display: inline-flex;
+  animation: marquee 20s linear infinite;
+}
+
+.marquee-track span {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0 2rem;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* ============================================
+   SECTIONS
+   ============================================ */
+
+.section {
+  margin-top: 2.5rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.section-number {
+  font-size: 1.8rem;
+  line-height: 1;
+  color: var(--accent);
+  -webkit-text-stroke: 1px var(--ink);
+  paint-order: stroke fill;
+}
+
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ============================================
+   WORK / WRITING CARDS
+   ============================================ */
 
 .work-list {
   list-style: none;
 }
 
 .work-list li {
-  margin-bottom: 1rem;
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  transition: border-color 200ms ease,
+    box-shadow 250ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.work-list li:hover {
+  border-color: var(--ink);
+  box-shadow: 4px 4px 0 var(--card-shadow);
+  transform: translate(-2px, -2px);
 }
 
 .work-list .work-name {
-  font-weight: 600;
+  font-weight: 700;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+a.work-name {
+  text-decoration: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 4'%3E%3Cpath d='M0 3 Q5 0 10 3 Q15 6 20 3' fill='none' stroke='currentColor' stroke-width='1'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-position: 0 100%;
+  background-size: 20px 4px;
+  padding-bottom: 2px;
+  transition: color 200ms ease;
+}
+
+a.work-name:hover {
+  color: var(--accent);
 }
 
 .work-list .work-date {
-  color: #666;
-  font-size: 0.9rem;
+  color: var(--ink-muted);
+  font-size: 0.88rem;
 }
 
 .work-list .work-desc {
   font-size: 0.95rem;
+  display: block;
+  margin-top: 0.15rem;
 }
+
+/* ============================================
+   FOOTER
+   ============================================ */
 
 footer {
   margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid var(--ink);
   font-size: 0.85rem;
-  color: #666;
+  color: var(--ink-muted);
+  transition: border-color 250ms ease;
+}
+
+footer a {
+  color: var(--ink-muted);
+  text-decoration: underline;
+  transition: color 200ms ease;
+}
+
+footer a:hover {
+  color: var(--accent);
+}
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  html,
+  html.hopping {
+    transition: background 500ms ease, color 500ms ease;
+  }
+
+  html.hopping .marquee-band {
+    transition: background 500ms ease, color 500ms ease;
+  }
+
+  /* Kill all springy hovers and marquee scroll */
+  .theme-dot,
+  .theme-dot.active,
+  .auto-toggle,
+  .pill,
+  .work-list li {
+    transition: none !important;
+  }
+
+  .marquee-track {
+    animation: none;
+  }
+
+  /* No glitch effects */
+  html.hopping .big-name,
+  html.hopping .section-number {
+    animation: none !important;
+  }
+
+  .glitch-overlay.active .glitch-slice-1,
+  .glitch-overlay.active .glitch-slice-2,
+  .glitch-overlay.active .glitch-slice-3 {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+}
+
+/* ============================================
+   SMALL SCREENS
+   ============================================ */
+
+@media (max-width: 480px) {
+  body {
+    padding-top: 3.5rem;
+  }
+
+  .big-name {
+    font-size: 2.2rem;
+  }
+
+  .theme-switcher {
+    top: 0.75rem;
+    right: 0.75rem;
+  }
 }
