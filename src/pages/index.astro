@@ -189,10 +189,10 @@ const ALL_THEMES = ["wash","brooklyn","bazaar","chrome","brick","hoedown","meado
     <script is:inline>
       (function () {
         var THEMES = ["wash","brooklyn","bazaar","chrome","brick","hoedown","meadow","cape","crimson","quest","arcade","floss","arcana"];
-        var HOP_INTERVAL = 40000;
-        var GLITCH_DURATION = 500;
-        var BLEED_MIN = 10000;
-        var BLEED_MAX = 14000;
+        var HOP_INTERVAL = 20000;
+        var GLITCH_DURATION = 650;
+        var BLEED_MIN = 9000;
+        var BLEED_MAX = 12000;
         var BLEED_DURATION_MIN = 200;
         var BLEED_DURATION_MAX = 300;
         var MIN_GAP = 7000;
@@ -339,35 +339,53 @@ const ALL_THEMES = ["wash","brooklyn","bazaar","chrome","brick","hoedown","meado
           try {
             var ac = ensureAudio();
             var t = ac.currentTime;
+
+            /* Beat 1: static burst at tear-in (0-120ms) */
+            var bufSize = Math.floor(ac.sampleRate * 0.12);
+            var noiseBuf = ac.createBuffer(1, bufSize, ac.sampleRate);
+            var nd = noiseBuf.getChannelData(0);
+            for (var i = 0; i < bufSize; i++) nd[i] = Math.random() * 2 - 1;
+            var noise1 = ac.createBufferSource();
+            noise1.buffer = noiseBuf;
+            var bp1 = ac.createBiquadFilter();
+            bp1.type = "bandpass";
+            bp1.frequency.value = 2000;
+            bp1.Q.value = 3;
+            var ng1 = ac.createGain();
+            ng1.gain.setValueAtTime(0.08, t);
+            ng1.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
+            noise1.connect(bp1);
+            bp1.connect(ng1);
+            ng1.connect(ac.destination);
+            noise1.start(t);
+            noise1.stop(t + 0.12);
+
+            /* Beat 2: downward zap through the drift (80-400ms) */
             var osc = ac.createOscillator();
             osc.type = "sawtooth";
-            osc.frequency.setValueAtTime(800, t);
-            osc.frequency.exponentialRampToValueAtTime(200, t + 0.15);
+            osc.frequency.setValueAtTime(900, t + 0.08);
+            osc.frequency.exponentialRampToValueAtTime(150, t + 0.35);
             var gain = ac.createGain();
-            gain.gain.setValueAtTime(0.12, t);
-            gain.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+            gain.gain.setValueAtTime(0, t);
+            gain.gain.linearRampToValueAtTime(0.12, t + 0.1);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + 0.4);
             osc.connect(gain);
             gain.connect(ac.destination);
-            osc.start(t);
-            osc.stop(t + 0.3);
-            var bufSize = Math.floor(ac.sampleRate * 0.1);
-            var noiseBuf = ac.createBuffer(1, bufSize, ac.sampleRate);
-            var data = noiseBuf.getChannelData(0);
-            for (var i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
-            var noise = ac.createBufferSource();
-            noise.buffer = noiseBuf;
-            var bp = ac.createBiquadFilter();
-            bp.type = "bandpass";
-            bp.frequency.value = 1200;
-            bp.Q.value = 2;
-            var ng = ac.createGain();
-            ng.gain.setValueAtTime(0.06, t);
-            ng.gain.exponentialRampToValueAtTime(0.001, t + 0.1);
-            noise.connect(bp);
-            bp.connect(ng);
-            ng.connect(ac.destination);
-            noise.start(t);
-            noise.stop(t + 0.1);
+            osc.start(t + 0.08);
+            osc.stop(t + 0.4);
+
+            /* Beat 3: settle tick (450ms, short sine blip) */
+            var tick = ac.createOscillator();
+            tick.type = "sine";
+            tick.frequency.value = 440;
+            var tg = ac.createGain();
+            tg.gain.setValueAtTime(0, t + 0.45);
+            tg.gain.linearRampToValueAtTime(0.04, t + 0.46);
+            tg.gain.exponentialRampToValueAtTime(0.001, t + 0.55);
+            tick.connect(tg);
+            tg.connect(ac.destination);
+            tick.start(t + 0.45);
+            tick.stop(t + 0.55);
           } catch(e) {}
         }
 
@@ -802,7 +820,7 @@ const ALL_THEMES = ["wash","brooklyn","bazaar","chrome","brick","hoedown","meado
           }
         });
 
-        /* ---- HOP ---- */
+        /* ---- HOP (three-beat cinematic glitch, 650ms) ---- */
         function performHop() {
           if (userBusy()) return;
           if (timeSinceLastEvent() < MIN_GAP) return;
@@ -811,13 +829,50 @@ const ALL_THEMES = ["wash","brooklyn","bazaar","chrome","brick","hoedown","meado
           playHopZap();
 
           var target = nextTheme();
+          var colors = THEME_COLORS[target];
           root.classList.add("hopping");
 
           if (!reducedMotion.matches) {
-            var colors = THEME_COLORS[target];
-            var slices = glitchOverlay.querySelectorAll(".glitch-slice");
-            for (var i = 0; i < slices.length; i++) slices[i].style.background = colors.bg;
             glitchOverlay.classList.add("active");
+
+            /* Beat 1: tear-in, 4-6 dynamic slices staggered */
+            var sliceCount = randomBetween(4, 7);
+            var dynSlices = [];
+            for (var si = 0; si < sliceCount; si++) {
+              var sl = document.createElement("div");
+              sl.style.cssText = "position:absolute;left:0;right:0;opacity:0;pointer-events:none;";
+              sl.style.top = randomBetween(5, 85) + "%";
+              sl.style.height = randomBetween(12, 70) + "px";
+              sl.style.background = colors.bg;
+              sl.style.borderTop = "1px solid " + colors.accent;
+              sl.style.borderBottom = "1px solid " + colors.accent;
+              var offset = (si % 2 === 0 ? 1 : -1) * randomBetween(6, 14);
+              sl.style.transform = "translateX(" + offset + "px)";
+              glitchOverlay.appendChild(sl);
+              dynSlices.push({ el: sl, offset: offset, delay: si * 35 });
+            }
+
+            /* Staggered fade-in for each slice */
+            dynSlices.forEach(function (s) {
+              setTimeout(function () {
+                s.el.style.transition = "opacity 60ms ease";
+                s.el.style.opacity = "0.7";
+              }, s.delay);
+            });
+
+            /* Beat 3: settle, slices slide to zero and fade out */
+            setTimeout(function () {
+              dynSlices.forEach(function (s) {
+                s.el.style.transition = "transform 200ms ease, opacity 200ms ease";
+                s.el.style.transform = "translateX(0)";
+                s.el.style.opacity = "0";
+              });
+            }, 450);
+
+            /* Remove dynamic slices after glitch */
+            setTimeout(function () {
+              dynSlices.forEach(function (s) { s.el.remove(); });
+            }, GLITCH_DURATION);
           }
 
           applyTheme(target);
@@ -828,7 +883,7 @@ const ALL_THEMES = ["wash","brooklyn","bazaar","chrome","brick","hoedown","meado
             glitchOverlay.classList.remove("active");
             glitchTimeout = null;
             setTimeout(function () {
-              triggerChase();
+              if (!chaseRunning) triggerChase();
               showHint();
             }, 300);
           }, GLITCH_DURATION);
@@ -856,23 +911,57 @@ const ALL_THEMES = ["wash","brooklyn","bazaar","chrome","brick","hoedown","meado
             localStorage.setItem("autoTheme", "off");
             updateAutoBtn();
             stopAuto();
+            if (switcherTray) switcherTray.classList.remove("open");
 
+            /* Use the same three-beat hop */
             lastEventTime = Date.now();
+            playHopZap();
+            var prevCurrent = current;
             root.classList.add("hopping");
+
             if (!reducedMotion.matches) {
               var colors = THEME_COLORS[theme];
-              var slices = glitchOverlay.querySelectorAll(".glitch-slice");
-              for (var i = 0; i < slices.length; i++) slices[i].style.background = colors.bg;
               glitchOverlay.classList.add("active");
+              var sliceCount = randomBetween(4, 7);
+              var dynSlices = [];
+              for (var si = 0; si < sliceCount; si++) {
+                var sl = document.createElement("div");
+                sl.style.cssText = "position:absolute;left:0;right:0;opacity:0;pointer-events:none;";
+                sl.style.top = randomBetween(5, 85) + "%";
+                sl.style.height = randomBetween(12, 70) + "px";
+                sl.style.background = colors.bg;
+                sl.style.borderTop = "1px solid " + colors.accent;
+                sl.style.borderBottom = "1px solid " + colors.accent;
+                var offset = (si % 2 === 0 ? 1 : -1) * randomBetween(6, 14);
+                sl.style.transform = "translateX(" + offset + "px)";
+                glitchOverlay.appendChild(sl);
+                dynSlices.push({ el: sl, delay: si * 35 });
+              }
+              dynSlices.forEach(function (s) {
+                setTimeout(function () {
+                  s.el.style.transition = "opacity 60ms ease";
+                  s.el.style.opacity = "0.7";
+                }, s.delay);
+              });
+              setTimeout(function () {
+                dynSlices.forEach(function (s) {
+                  s.el.style.transition = "transform 200ms ease, opacity 200ms ease";
+                  s.el.style.transform = "translateX(0)";
+                  s.el.style.opacity = "0";
+                });
+              }, 450);
+              setTimeout(function () {
+                dynSlices.forEach(function (s) { s.el.remove(); });
+              }, GLITCH_DURATION);
             }
+
             applyTheme(theme);
-            if (switcherTray) switcherTray.classList.remove("open");
             if (glitchTimeout) clearTimeout(glitchTimeout);
             glitchTimeout = setTimeout(function () {
               root.classList.remove("hopping");
               glitchOverlay.classList.remove("active");
               glitchTimeout = null;
-              setTimeout(function () { triggerChase(); }, 300);
+              setTimeout(function () { if (!chaseRunning) triggerChase(); }, 300);
             }, GLITCH_DURATION);
           });
         });

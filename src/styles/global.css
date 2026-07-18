@@ -275,7 +275,19 @@ html {
 }
 
 html.hopping {
-  transition: background 500ms ease, color 500ms ease;
+  transition: background 650ms ease, color 650ms ease;
+}
+
+/* Content wrapper shift during hop (single out-and-back) */
+html.hopping body {
+  animation: wrapperShift 650ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes wrapperShift {
+  0%   { transform: translateX(0); }
+  20%  { transform: translateX(3px); }
+  50%  { transform: translateX(-2px); }
+  100% { transform: translateX(0); }
 }
 
 body {
@@ -543,23 +555,26 @@ html.hopping .glitch-overlay.active .glitch-slice-3 { animation: sliceShift3 500
   100% { opacity: 0; transform: translateX(0); }
 }
 
-html.hopping .big-name .name-letter { animation: rgbSplitName 500ms ease forwards; }
-html.hopping .section-number { animation: rgbSplitNumber 500ms ease forwards; }
+html.hopping .big-name .name-letter { animation: rgbSplitName 650ms ease forwards; }
+html.hopping .section-number { animation: rgbSplitNumber 650ms ease forwards; }
 html.bleeding .big-name .name-letter { animation: rgbSplitMicro 250ms ease forwards; }
 
+/* Three-beat RGB split: tear-in (0-200ms), drift (100-450ms), settle (450-650ms) */
 @keyframes rgbSplitName {
   0%   { text-shadow: 1px 1px 0 var(--accent); }
-  15%  { text-shadow: 3px -2px 0 var(--accent), -2px 2px 0 var(--secondary); }
-  40%  { text-shadow: 3px -2px 0 var(--accent), -2px 2px 0 var(--secondary); }
-  60%  { text-shadow: 1px 1px 0 var(--accent); }
+  10%  { text-shadow: 4px -3px 0 var(--accent), -3px 3px 0 var(--secondary); }
+  35%  { text-shadow: 4px -3px 0 var(--accent), -3px 3px 0 var(--secondary); }
+  55%  { text-shadow: 1px 1px 0 var(--accent); }
+  72%  { text-shadow: 1px 0 0 var(--accent); }
   100% { text-shadow: 1px 1px 0 var(--accent); }
 }
 
 @keyframes rgbSplitNumber {
   0%   { text-shadow: none; }
-  15%  { text-shadow: 2px -2px 0 var(--accent), -2px 1px 0 var(--secondary); }
-  40%  { text-shadow: 2px -2px 0 var(--accent), -2px 1px 0 var(--secondary); }
-  60%  { text-shadow: none; }
+  10%  { text-shadow: 3px -3px 0 var(--accent), -3px 2px 0 var(--secondary); }
+  35%  { text-shadow: 3px -3px 0 var(--accent), -3px 2px 0 var(--secondary); }
+  55%  { text-shadow: none; }
+  72%  { text-shadow: 1px 0 0 var(--accent); }
   100% { text-shadow: none; }
 }
 
@@ -570,9 +585,9 @@ html.bleeding .big-name .name-letter { animation: rgbSplitMicro 250ms ease forwa
   100% { text-shadow: 1px 1px 0 var(--accent); }
 }
 
-html.hopping .pill { transition: border-color 500ms ease, color 500ms ease, background 200ms ease, transform 250ms cubic-bezier(0.34,1.56,0.64,1); }
-html.hopping footer { transition: border-color 500ms ease; }
-html.hopping .auto-toggle { transition: background 500ms ease, color 500ms ease, transform 250ms cubic-bezier(0.34,1.56,0.64,1), opacity 200ms ease; }
+html.hopping .pill { transition: border-color 650ms ease, color 650ms ease, background 200ms ease, transform 250ms cubic-bezier(0.34,1.56,0.64,1); }
+html.hopping footer { transition: border-color 650ms ease; }
+html.hopping .auto-toggle { transition: background 650ms ease, color 650ms ease, transform 250ms cubic-bezier(0.34,1.56,0.64,1), opacity 200ms ease; }
 
 /* ============================================
    PART 1: JELLY NAME
@@ -1027,7 +1042,11 @@ footer a:hover { color: var(--accent); }
 @media (prefers-reduced-motion: reduce) {
   html,
   html.hopping {
-    transition: background 500ms ease, color 500ms ease;
+    transition: background 650ms ease, color 650ms ease;
+  }
+
+  html.hopping body {
+    animation: none !important;
   }
 
   .theme-dot, .theme-dot.active, .auto-toggle, .pill, .work-list li {
