@@ -15,8 +15,6 @@ const hours = now.getHours();
 const greeting =
   hours < 12 ? "Good morning" : hours < 18 ? "Good afternoon" : "Good evening";
 
-const marqueeText = "SHAKIL MUSTHAFA \u00B7 BUILDER \u00B7 ECONOMIST \u00B7 ";
-
 const nameLetters = site.name.split("").map((ch, i) => ({
   char: ch,
   isSpace: ch === " ",
@@ -88,17 +86,6 @@ const nameLetters = site.name.split("").map((ch, i) => ({
       ))}
     </div>
 
-    <div class="marquee-band" aria-hidden="true">
-      <div class="marquee-track">
-        <span>{marqueeText}</span>
-        <span>{marqueeText}</span>
-        <span>{marqueeText}</span>
-        <span>{marqueeText}</span>
-        <span>{marqueeText}</span>
-        <span>{marqueeText}</span>
-      </div>
-    </div>
-
     <div class="wave-divider" aria-hidden="true"></div>
 
     <div class="section">
@@ -141,6 +128,14 @@ const nameLetters = site.name.split("").map((ch, i) => ({
           </li>
         ))}
       </ul>
+    </div>
+
+    <!-- Globe link -->
+    <div class="section">
+      <a href="/globe" class="section-header" style="text-decoration:none;color:inherit;">
+        <span class="section-number font-bubble">03</span>
+        <h2 class="section-title">Globe</h2>
+      </a>
     </div>
 
     <footer>

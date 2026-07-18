@@ -12,8 +12,6 @@
   --secondary: #5BC8C4;
   --halftone: rgba(46, 16, 101, 0.03);
   --card-shadow: #E86AA6;
-  --marquee-bg: #2E1065;
-  --marquee-fg: #FFF5F7;
   --radius: 6px;
   --border-w: 2px;
   --shadow-x: 4px;
@@ -29,8 +27,6 @@
   --secondary: #37D0EE;
   --halftone: rgba(242, 237, 228, 0.06);
   --card-shadow: #FF3E8A;
-  --marquee-bg: #F2EDE4;
-  --marquee-fg: #141126;
   --radius: 6px;
   --border-w: 2px;
   --shadow-x: 4px;
@@ -46,8 +42,6 @@
   --secondary: #E23E7B;
   --halftone: rgba(59, 21, 24, 0.04);
   --card-shadow: #F4772E;
-  --marquee-bg: #3B1518;
-  --marquee-fg: #FFF1DC;
   --radius: 6px;
   --border-w: 2px;
   --shadow-x: 4px;
@@ -63,8 +57,6 @@
   --secondary: #2E6BFF;
   --halftone: rgba(10, 17, 40, 0.04);
   --card-shadow: #E5303E;
-  --marquee-bg: #0A1128;
-  --marquee-fg: #EEF1F6;
   --radius: 2px;
   --border-w: 2px;
   --shadow-x: 4px;
@@ -81,8 +73,6 @@
   --link-underline: #0055BF;
   --halftone: rgba(26, 26, 26, 0.04);
   --card-shadow: #D01012;
-  --marquee-bg: #1A1A1A;
-  --marquee-fg: #FFFFFF;
   --radius: 8px;
   --border-w: 3px;
   --shadow-x: 6px;
@@ -314,7 +304,6 @@ html.bleeding .big-name .name-letter { animation: rgbSplitMicro 250ms ease forwa
   100% { text-shadow: 1px 1px 0 var(--accent); }
 }
 
-html.hopping .marquee-band { transition: background 500ms ease, color 500ms ease; }
 html.hopping .pill { transition: border-color 500ms ease, color 500ms ease, background 200ms ease, transform 250ms cubic-bezier(0.34,1.56,0.64,1); }
 html.hopping footer { transition: border-color 500ms ease; }
 html.hopping .auto-toggle { transition: background 500ms ease, color 500ms ease, transform 250ms cubic-bezier(0.34,1.56,0.64,1), opacity 200ms ease; }
@@ -342,7 +331,6 @@ html.hopping .auto-toggle { transition: background 500ms ease, color 500ms ease,
 }
 
 [data-theme="brooklyn"] .name-block::before { background-size: 6px 6px; }
-[data-theme="brooklyn"] .marquee-band::before { opacity: 0.8; }
 
 .big-name {
   font-size: clamp(2.5rem, 6vw, 3.8rem);
@@ -463,59 +451,7 @@ html.hopping .auto-toggle { transition: background 500ms ease, color 500ms ease,
 }
 
 /* ============================================
-   MARQUEE
-   ============================================ */
-
-.marquee-band {
-  background: var(--marquee-bg);
-  color: var(--marquee-fg);
-  overflow: hidden;
-  white-space: nowrap;
-  padding: 0.6rem 0;
-  margin: 2.5rem -1.5rem;
-  position: relative;
-  transition: background 250ms ease, color 250ms ease;
-}
-
-.marquee-band::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle, var(--halftone) 1px, transparent 1px);
-  background-size: 6px 6px;
-  opacity: 0.5;
-  pointer-events: none;
-}
-
-.marquee-track {
-  display: inline-flex;
-  animation: marquee 20s linear infinite;
-}
-
-.marquee-band:hover .marquee-track {
-  animation-duration: 14s;
-}
-
-.marquee-track span {
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  padding: 0 2rem;
-  transition: transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.marquee-track span:hover {
-  animation: jellySquash 300ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
-
-@keyframes marquee {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-/* ============================================
-   PART 5: LIVING DIVIDERS
+   LIVING DIVIDERS
    ============================================ */
 
 .wave-divider {
@@ -765,16 +701,9 @@ footer a:hover { color: var(--accent); }
     transition: background 500ms ease, color 500ms ease;
   }
 
-  html.hopping .marquee-band {
-    transition: background 500ms ease, color 500ms ease;
-  }
-
   .theme-dot, .theme-dot.active, .auto-toggle, .pill, .work-list li {
     transition: none !important;
   }
-
-  .marquee-track { animation: none; }
-  .marquee-band:hover .marquee-track { animation: none; }
 
   html.hopping .big-name .name-letter,
   html.hopping .section-number,
@@ -793,8 +722,7 @@ footer a:hover { color: var(--accent); }
   /* No jelly, no sticker tilt, no chase, no living dividers */
   .name-letter.jelly,
   .name-letter.jelly-neighbor,
-  .critter:hover,
-  .marquee-track span:hover {
+  .critter:hover {
     animation: none !important;
   }
 

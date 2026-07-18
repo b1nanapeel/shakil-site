@@ -1,0 +1,348 @@
+---
+import "../styles/global.css";
+import { site } from "../data/site";
+import { travel } from "../data/travel";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Globe - {site.name}</title>
+    <meta name="description" content={`${site.name} - travel globe`} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rounded+Mplus+1c:wght@900&display=swap"
+      rel="stylesheet"
+    />
+    <script is:inline>
+      (function () {
+        var VALID = ["wash", "brooklyn", "bazaar", "chrome", "brick"];
+        var t = localStorage.getItem("theme");
+        if (t && VALID.indexOf(t) !== -1) {
+          document.documentElement.setAttribute("data-theme", t);
+        } else {
+          document.documentElement.setAttribute("data-theme", "wash");
+        }
+      })();
+    </script>
+    <style>
+      body {
+        max-width: none;
+        padding: 0;
+        margin: 0;
+        overflow: hidden;
+        height: 100vh;
+      }
+
+      .globe-nav {
+        position: fixed;
+        top: 1.25rem;
+        left: 1.25rem;
+        z-index: 20;
+        display: flex;
+        align-items: baseline;
+        gap: 0.75rem;
+        text-decoration: none;
+        color: var(--ink);
+      }
+
+      .globe-nav:hover { opacity: 0.7; }
+
+      .globe-nav .section-number {
+        font-size: 1.4rem;
+      }
+
+      .globe-nav .section-title {
+        font-size: 0.9rem;
+      }
+
+      #globe-container {
+        width: 100vw;
+        height: 100vh;
+        cursor: grab;
+      }
+
+      #globe-container:active { cursor: grabbing; }
+
+      /* Photo card */
+      .photo-card {
+        position: fixed;
+        z-index: 30;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: var(--bg);
+        border: var(--border-w) solid var(--ink);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-x) var(--shadow-y) 0 var(--card-shadow);
+        max-width: 360px;
+        width: 90vw;
+        overflow: hidden;
+        opacity: 1;
+        transition: opacity 200ms ease;
+      }
+
+      .photo-card.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .photo-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        display: block;
+        background: var(--ink-muted);
+      }
+
+      .photo-info {
+        padding: 1rem;
+      }
+
+      .photo-info strong {
+        display: block;
+        font-size: 1rem;
+        margin-bottom: 0.25rem;
+      }
+
+      .photo-info .photo-country {
+        font-size: 0.85rem;
+        color: var(--ink-muted);
+      }
+
+      .photo-info .photo-caption {
+        display: block;
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+        color: var(--ink-muted);
+      }
+
+      .photo-close {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        border: none;
+        background: var(--ink);
+        color: var(--bg);
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+        -webkit-appearance: none;
+        appearance: none;
+      }
+
+      .photo-close:hover { opacity: 0.8; }
+
+      /* Mobile bottom sheet */
+      @media (max-width: 640px) {
+        .photo-card {
+          top: auto;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          transform: none;
+          max-width: none;
+          width: 100%;
+          border-radius: var(--radius) var(--radius) 0 0;
+          border-bottom: none;
+        }
+      }
+
+      .globe-nav-link {
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        align-items: baseline;
+        gap: 0.75rem;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="/" class="globe-nav globe-nav-link">
+      <span class="section-number font-bubble">00</span>
+      <span class="section-title">Home</span>
+    </a>
+
+    <div id="globe-container"></div>
+
+    <div class="photo-card hidden" id="photo-card">
+      <button class="photo-close" id="photo-close" aria-label="Close">X</button>
+      <img id="photo-img" src="" alt="" />
+      <div class="photo-info">
+        <strong id="photo-place"></strong>
+        <span class="photo-country" id="photo-country"></span>
+        <span class="photo-caption" id="photo-caption"></span>
+      </div>
+    </div>
+
+    <script is:inline define:vars={{ travelJSON: JSON.stringify(travel) }}>
+      window.__TRAVEL_DATA__ = JSON.parse(travelJSON);
+    </script>
+
+    <script>
+      import Globe from "globe.gl";
+      // @ts-ignore
+      import { feature } from "topojson-client";
+
+      const THEME_MAP: Record<string, { bg: string; ink: string; accent: string; globe: string; land: string; dark: boolean }> = {
+        wash:     { bg: "#FFF5F7", ink: "#2E1065", accent: "#E86AA6", globe: "#F8F0F4", land: "#c4a0c8", dark: false },
+        brooklyn: { bg: "#141126", ink: "#F2EDE4", accent: "#FF3E8A", globe: "#1a1530", land: "#3a3060", dark: true },
+        bazaar:   { bg: "#FFF1DC", ink: "#3B1518", accent: "#F4772E", globe: "#F5E8D0", land: "#c49a6c", dark: false },
+        chrome:   { bg: "#EEF1F6", ink: "#0A1128", accent: "#E5303E", globe: "#E0E4EC", land: "#8890a0", dark: false },
+        brick:    { bg: "#FFFFFF", ink: "#1A1A1A", accent: "#D01012", globe: "#F0F0F0", land: "#999999", dark: false },
+      };
+
+      const DOT_COLOR = "#E5303E";
+      const travelData = (window as any).__TRAVEL_DATA__ as Array<{
+        place: string; country: string; lat: number; lng: number; photo: string; caption?: string;
+      }>;
+
+      const container = document.getElementById("globe-container")!;
+      const card = document.getElementById("photo-card")!;
+      const closeBtn = document.getElementById("photo-close")!;
+      const photoImg = document.getElementById("photo-img") as HTMLImageElement;
+      const photoPlace = document.getElementById("photo-place")!;
+      const photoCountry = document.getElementById("photo-country")!;
+      const photoCaption = document.getElementById("photo-caption")!;
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+      function getTheme(): string {
+        return document.documentElement.getAttribute("data-theme") || "wash";
+      }
+
+      function getColors() {
+        return THEME_MAP[getTheme()] || THEME_MAP.wash;
+      }
+
+      let globe: any;
+      let autoRotate = !reducedMotion.matches;
+      let interacting = false;
+      let interactTimeout: ReturnType<typeof setTimeout>;
+
+      fetch("https://cdn.jsdelivr.net/npm/world-atlas@2/land-110m.json")
+        .then((r) => r.json())
+        .then((topology) => {
+          const land = feature(topology, topology.objects.land);
+          const colors = getColors();
+
+          globe = Globe()(container)
+            .backgroundColor("rgba(0,0,0,0)")
+            .showGlobe(true)
+            .showAtmosphere(true)
+            .atmosphereColor(colors.accent)
+            .atmosphereAltitude(0.18)
+            .polygonsData(land.features)
+            .polygonCapColor(() => colors.land)
+            .polygonSideColor(() => "rgba(0,0,0,0)")
+            .polygonStrokeColor(() => "rgba(0,0,0,0)")
+            .pointsData(travelData)
+            .pointColor(() => DOT_COLOR)
+            .pointAltitude(0.01)
+            .pointRadius(0.4)
+            .pointLabel((d: any) => d.place)
+            .onPointClick((point: any) => {
+              openCard(point);
+              globe.pointOfView({ lat: point.lat, lng: point.lng, altitude: 1.5 }, 800);
+            })
+            .width(container.clientWidth)
+            .height(container.clientHeight);
+
+          // Set globe body color
+          const globeMat = globe.globeMaterial();
+          globeMat.color.set(colors.globe);
+          globeMat.emissive.set(colors.dark ? colors.globe : "#000000");
+          globeMat.emissiveIntensity = colors.dark ? 0.15 : 0;
+
+          // Auto-rotation
+          if (autoRotate) {
+            globe.controls().autoRotate = true;
+            globe.controls().autoRotateSpeed = 0.4;
+          }
+
+          // Pause auto-rotate on interaction
+          globe.controls().addEventListener("start", () => {
+            interacting = true;
+            clearTimeout(interactTimeout);
+            globe.controls().autoRotate = false;
+          });
+
+          globe.controls().addEventListener("end", () => {
+            interacting = false;
+            if (autoRotate) {
+              interactTimeout = setTimeout(() => {
+                globe.controls().autoRotate = true;
+              }, 3000);
+            }
+          });
+
+          // Dot pulse via CSS animation on the canvas points
+          if (!reducedMotion.matches) {
+            setInterval(() => {
+              const t = (Math.sin(Date.now() / 1000 * Math.PI) + 1) / 2;
+              globe.pointRadius(0.35 + 0.15 * t);
+            }, 100);
+          }
+
+          // Watch for theme changes
+          const observer = new MutationObserver(() => {
+            const c = getColors();
+            globe.atmosphereColor(c.accent);
+            globe.polygonCapColor(() => c.land);
+            globeMat.color.set(c.globe);
+            globeMat.emissive.set(c.dark ? c.globe : "#000000");
+            globeMat.emissiveIntensity = c.dark ? 0.15 : 0;
+            globe.backgroundColor("rgba(0,0,0,0)");
+          });
+
+          observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ["data-theme"],
+          });
+
+          // Resize
+          window.addEventListener("resize", () => {
+            globe.width(container.clientWidth).height(container.clientHeight);
+          });
+        });
+
+      function openCard(point: any) {
+        photoImg.src = point.photo;
+        photoImg.alt = point.place;
+        photoPlace.textContent = point.place;
+        photoCountry.textContent = point.country;
+        photoCaption.textContent = point.caption || "";
+        photoCaption.style.display = point.caption ? "block" : "none";
+        card.classList.remove("hidden");
+      }
+
+      function closeCard() {
+        card.classList.add("hidden");
+      }
+
+      closeBtn.addEventListener("click", closeCard);
+
+      document.addEventListener("click", (e) => {
+        if (
+          !card.classList.contains("hidden") &&
+          !card.contains(e.target as Node) &&
+          !(e.target as HTMLElement).closest(".scene-tooltip")
+        ) {
+          closeCard();
+        }
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeCard();
+      });
+    </script>
+  </body>
+</html>
