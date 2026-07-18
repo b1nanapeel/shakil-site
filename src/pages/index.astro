@@ -17,7 +17,6 @@ const greeting =
 
 const marqueeText = "SHAKIL MUSTHAFA \u00B7 BUILDER \u00B7 ECONOMIST \u00B7 ";
 
-/* Split name into letters for jelly effect */
 const nameLetters = site.name.split("").map((ch, i) => ({
   char: ch,
   isSpace: ch === " ",
@@ -50,7 +49,6 @@ const nameLetters = site.name.split("").map((ch, i) => ({
     </script>
   </head>
   <body>
-    <!-- Theme Switcher -->
     <div class="theme-switcher">
       <button class="theme-dot" data-dot="wash" aria-label="Wash theme"></button>
       <button class="theme-dot" data-dot="brooklyn" aria-label="Brooklyn theme"></button>
@@ -60,7 +58,6 @@ const nameLetters = site.name.split("").map((ch, i) => ({
       <button class="auto-toggle playing" aria-label="Auto theme" title="auto theme">&#9654;</button>
     </div>
 
-    <!-- Glitch Overlay -->
     <div class="glitch-overlay" aria-hidden="true">
       <div class="glitch-slice glitch-slice-1"></div>
       <div class="glitch-slice glitch-slice-2"></div>
@@ -68,10 +65,8 @@ const nameLetters = site.name.split("").map((ch, i) => ({
       <div class="bleed-slice"></div>
     </div>
 
-    <!-- Chase Overlay -->
     <div class="chase-overlay" aria-hidden="true" id="chase-overlay"></div>
 
-    <!-- PART 1: Jelly Name -->
     <div class="name-block">
       <h1 class="big-name font-bubble" aria-label={site.name} id="jelly-name">
         {nameLetters.map((l) =>
@@ -85,17 +80,14 @@ const nameLetters = site.name.split("").map((ch, i) => ({
     </div>
     <p class="updated">{greeting}. Updated {buildDate}.</p>
 
-    <!-- Bio -->
     <p class="bio" set:html={site.bio} />
 
-    <!-- Links -->
     <div class="links">
       {site.links.map((link) => (
         <a href={link.url} class="pill">{link.label}</a>
       ))}
     </div>
 
-    <!-- Marquee -->
     <div class="marquee-band" aria-hidden="true">
       <div class="marquee-track">
         <span>{marqueeText}</span>
@@ -107,10 +99,8 @@ const nameLetters = site.name.split("").map((ch, i) => ({
       </div>
     </div>
 
-    <!-- Living divider -->
     <div class="wave-divider" aria-hidden="true"></div>
 
-    <!-- Notable Work -->
     <div class="section">
       <div class="section-header">
         <span class="section-number font-bubble">01</span>
@@ -131,10 +121,8 @@ const nameLetters = site.name.split("").map((ch, i) => ({
       </ul>
     </div>
 
-    <!-- Living divider -->
     <div class="wave-divider" aria-hidden="true"></div>
 
-    <!-- Writing -->
     <div class="section">
       <div class="section-header">
         <span class="section-number font-bubble">02</span>
@@ -155,35 +143,37 @@ const nameLetters = site.name.split("").map((ch, i) => ({
       </ul>
     </div>
 
-    <!-- Footer with critters -->
     <footer>
-      <!-- PART 2: Critters sitting on the footer ledge -->
       <div class="critter-ledge" aria-hidden="true">
+        <!-- Acrobat: rounded body, domino mask band, ink outlines -->
         <div class="critter critter-a" id="critter-a">
           <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <ellipse cx="20" cy="24" rx="16" ry="14" fill="var(--accent)"/>
-            <ellipse cx="13" cy="20" rx="3.5" ry="4" fill="white"/>
-            <ellipse cx="27" cy="20" rx="3.5" ry="4" fill="white"/>
-            <circle cx="14" cy="20.5" r="2" fill="var(--ink)"/>
-            <circle cx="28" cy="20.5" r="2" fill="var(--ink)"/>
+            <ellipse cx="20" cy="24" rx="14" ry="13" fill="var(--accent)" stroke="var(--ink)" stroke-width="1.5"/>
+            <rect x="8" y="17" width="24" height="7" rx="3.5" fill="var(--ink)"/>
+            <ellipse cx="14" cy="20" rx="3" ry="3.5" fill="white"/>
+            <ellipse cx="26" cy="20" rx="3" ry="3.5" fill="white"/>
+            <circle cx="15" cy="20.5" r="1.8" fill="var(--accent)"/>
+            <circle cx="27" cy="20.5" r="1.8" fill="var(--accent)"/>
             <g class="critter-eye" id="eye-a">
-              <rect x="10" y="18" width="8" height="0" rx="1" fill="var(--accent)"/>
-              <rect x="23" y="18" width="8" height="0" rx="1" fill="var(--accent)"/>
+              <rect x="9" y="17" width="10" height="0" rx="1" fill="var(--ink)"/>
+              <rect x="21" y="17" width="10" height="0" rx="1" fill="var(--ink)"/>
             </g>
           </svg>
         </div>
+        <!-- Stretchy: soft round body, stub feet, dot eyes, wide grin -->
         <div class="critter critter-b" id="critter-b">
-          <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M18 4 L32 28 Q32 32 28 32 L8 32 Q4 32 4 28 Z" fill="var(--secondary)"/>
-            <rect x="12" y="32" width="4" height="4" rx="2" fill="var(--secondary)"/>
-            <rect x="20" y="32" width="4" height="4" rx="2" fill="var(--secondary)"/>
-            <ellipse cx="13" cy="20" rx="3" ry="3.5" fill="white"/>
-            <ellipse cx="23" cy="20" rx="3" ry="3.5" fill="white"/>
-            <circle cx="14" cy="20.5" r="1.8" fill="var(--ink)"/>
-            <circle cx="24" cy="20.5" r="1.8" fill="var(--ink)"/>
+          <svg viewBox="0 0 38 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="19" cy="22" rx="15" ry="14" fill="var(--secondary)"/>
+            <ellipse cx="12" cy="35" rx="4" ry="3" fill="var(--secondary)"/>
+            <ellipse cx="26" cy="35" rx="4" ry="3" fill="var(--secondary)"/>
+            <circle cx="13" cy="18" r="2.5" fill="white"/>
+            <circle cx="25" cy="18" r="2.5" fill="white"/>
+            <circle cx="13.5" cy="18.5" r="1.5" fill="var(--ink)"/>
+            <circle cx="25.5" cy="18.5" r="1.5" fill="var(--ink)"/>
+            <path d="M11 26 Q19 33 27 26" fill="none" stroke="var(--ink)" stroke-width="1.5" stroke-linecap="round"/>
             <g class="critter-eye" id="eye-b">
-              <rect x="10" y="18" width="7" height="0" rx="1" fill="var(--secondary)"/>
-              <rect x="20" y="18" width="7" height="0" rx="1" fill="var(--secondary)"/>
+              <rect x="10" y="16" width="8" height="0" rx="1" fill="var(--secondary)"/>
+              <rect x="22" y="16" width="8" height="0" rx="1" fill="var(--secondary)"/>
             </g>
           </svg>
         </div>
@@ -192,9 +182,6 @@ const nameLetters = site.name.split("").map((ch, i) => ({
       <span class="footer-hint">press g</span>
     </footer>
 
-    <!-- ============================================
-         PERSONALITY MODULE
-         ============================================ -->
     <script is:inline>
       (function () {
         var THEMES = ["wash", "brooklyn", "bazaar", "chrome", "brick"];
@@ -207,11 +194,11 @@ const nameLetters = site.name.split("").map((ch, i) => ({
         var MIN_GAP = 7000;
 
         var THEME_COLORS = {
-          wash:     { bg: "#FFF5F7", accent: "#E86AA6", secondary: "#5BC8C4" },
-          brooklyn: { bg: "#141126", accent: "#FF3E8A", secondary: "#37D0EE" },
-          bazaar:   { bg: "#FFF1DC", accent: "#F4772E", secondary: "#E23E7B" },
-          chrome:   { bg: "#EEF1F6", accent: "#E5303E", secondary: "#2E6BFF" },
-          brick:    { bg: "#FFFFFF", accent: "#D01012", secondary: "#FFCF00" }
+          wash:     { bg: "#FFF5F7", accent: "#E86AA6", secondary: "#5BC8C4", ink: "#2E1065" },
+          brooklyn: { bg: "#141126", accent: "#FF3E8A", secondary: "#37D0EE", ink: "#F2EDE4" },
+          bazaar:   { bg: "#FFF1DC", accent: "#F4772E", secondary: "#E23E7B", ink: "#3B1518" },
+          chrome:   { bg: "#EEF1F6", accent: "#E5303E", secondary: "#2E6BFF", ink: "#0A1128" },
+          brick:    { bg: "#FFFFFF", accent: "#D01012", secondary: "#FFCF00", ink: "#1A1A1A" }
         };
 
         var root = document.documentElement;
@@ -231,6 +218,7 @@ const nameLetters = site.name.split("").map((ch, i) => ({
         var lastEventTime = 0;
         var chaseRunning = false;
         var chaseDirection = 1;
+        var rolesFlip = false;
 
         function currentIndex() { return THEMES.indexOf(current); }
         function nextTheme() { return THEMES[(currentIndex() + 1) % THEMES.length]; }
@@ -257,7 +245,6 @@ const nameLetters = site.name.split("").map((ch, i) => ({
 
         function timeSinceLastEvent() { return Date.now() - lastEventTime; }
 
-        /* ---- PART 7: THEME FAVICON ---- */
         function updateFavicon(accent) {
           var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">'
             + '<rect width="100" height="100" rx="12" fill="' + accent + '"/>'
@@ -266,7 +253,6 @@ const nameLetters = site.name.split("").map((ch, i) => ({
           favicon.href = "data:image/svg+xml," + encodeURIComponent(svg);
         }
 
-        /* ---- APPLY THEME ---- */
         function applyTheme(name) {
           current = name;
           root.setAttribute("data-theme", name);
@@ -275,7 +261,49 @@ const nameLetters = site.name.split("").map((ch, i) => ({
           updateFavicon(THEME_COLORS[name].accent);
         }
 
-        /* ---- PART 2: CRITTER BLINK ---- */
+        function playBoing(freqStart, freqEnd, vol) {
+          try {
+            var ac = new (window.AudioContext || window.webkitAudioContext)();
+            var osc = ac.createOscillator();
+            var gain = ac.createGain();
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(freqStart, ac.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(freqEnd, ac.currentTime + 0.1);
+            gain.gain.setValueAtTime(vol, ac.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.15);
+            osc.connect(gain);
+            gain.connect(ac.destination);
+            osc.start();
+            osc.stop(ac.currentTime + 0.15);
+          } catch (e) {}
+        }
+
+        /* SVG builders */
+        function acrobatSVG(c) {
+          return '<svg viewBox="0 0 40 40" width="40" height="40" fill="none">'
+            + '<ellipse cx="20" cy="24" rx="14" ry="13" fill="' + c.accent + '" stroke="' + c.ink + '" stroke-width="1.5"/>'
+            + '<rect x="8" y="17" width="24" height="7" rx="3.5" fill="' + c.ink + '"/>'
+            + '<ellipse cx="14" cy="20" rx="3" ry="3.5" fill="white"/>'
+            + '<ellipse cx="26" cy="20" rx="3" ry="3.5" fill="white"/>'
+            + '<circle cx="15" cy="20.5" r="1.8" fill="' + c.accent + '"/>'
+            + '<circle cx="27" cy="20.5" r="1.8" fill="' + c.accent + '"/>'
+            + '</svg>';
+        }
+
+        function stretchySVG(c) {
+          return '<svg viewBox="0 0 38 40" width="38" height="40" fill="none">'
+            + '<ellipse cx="19" cy="22" rx="15" ry="14" fill="' + c.secondary + '"/>'
+            + '<ellipse cx="12" cy="35" rx="4" ry="3" fill="' + c.secondary + '"/>'
+            + '<ellipse cx="26" cy="35" rx="4" ry="3" fill="' + c.secondary + '"/>'
+            + '<circle cx="13" cy="18" r="2.5" fill="white"/>'
+            + '<circle cx="25" cy="18" r="2.5" fill="white"/>'
+            + '<circle cx="13.5" cy="18.5" r="1.5" fill="' + c.ink + '"/>'
+            + '<circle cx="25.5" cy="18.5" r="1.5" fill="' + c.ink + '"/>'
+            + '<path d="M11 26 Q19 33 27 26" fill="none" stroke="' + c.ink + '" stroke-width="1.5" stroke-linecap="round"/>'
+            + '</svg>';
+        }
+
+        /* ---- CRITTER BLINK ---- */
         function blinkCritter(eyeId, fillColor) {
           var g = document.getElementById(eyeId);
           if (!g) return;
@@ -291,7 +319,7 @@ const nameLetters = site.name.split("").map((ch, i) => ({
 
         function scheduleBlinkA() {
           setTimeout(function () {
-            blinkCritter("eye-a", "var(--accent)");
+            blinkCritter("eye-a", "var(--ink)");
             scheduleBlinkA();
           }, randomBetween(4000, 7000));
         }
@@ -306,64 +334,43 @@ const nameLetters = site.name.split("").map((ch, i) => ({
         scheduleBlinkA();
         scheduleBlinkB();
 
-        /* ---- PART 3: CHASE ---- */
+        /* ---- CHASE ---- */
         function triggerChase() {
           if (chaseRunning || reducedMotion.matches) return;
           chaseRunning = true;
 
-          var duration = randomBetween(2500, 3500);
+          var duration = randomBetween(2500, 4000);
           var dir = chaseDirection;
           chaseDirection *= -1;
+          rolesFlip = !rolesFlip;
+          var acrobatChases = rolesFlip;
+          var isCatch = Math.random() < 0.25;
           var vw = window.innerWidth;
           var startX = dir > 0 ? -60 : vw + 60;
           var endX = dir > 0 ? vw + 60 : -60;
           var gap = 60 * dir;
           var colors = THEME_COLORS[current];
+          var flipBase = dir < 0 ? "scaleX(-1) " : "";
 
-          /* Create runner (critter B) */
-          var runner = document.createElement("div");
-          runner.className = "chase-runner";
-          runner.innerHTML = '<svg viewBox="0 0 36 36" width="36" height="36" fill="none">'
-            + '<path d="M18 4 L32 28 Q32 32 28 32 L8 32 Q4 32 4 28 Z" fill="' + colors.secondary + '"/>'
-            + '<ellipse cx="13" cy="20" rx="3" ry="3.5" fill="white"/>'
-            + '<ellipse cx="23" cy="20" rx="3" ry="3.5" fill="white"/>'
-            + '<circle cx="14" cy="20.5" r="1.8" fill="' + colors.bg + '"/>'
-            + '<circle cx="24" cy="20.5" r="1.8" fill="' + colors.bg + '"/>'
-            + '</svg>';
-          runner.style.left = startX + "px";
-          runner.style.transform = dir < 0 ? "scaleX(-1)" : "";
+          var fleeEl = document.createElement("div");
+          fleeEl.className = "chase-runner";
+          var chaseEl = document.createElement("div");
+          chaseEl.className = "chase-runner";
 
-          /* Create chaser (critter A) */
-          var chaser = document.createElement("div");
-          chaser.className = "chase-runner";
-          chaser.innerHTML = '<svg viewBox="0 0 40 40" width="40" height="40" fill="none">'
-            + '<ellipse cx="20" cy="24" rx="16" ry="14" fill="' + colors.accent + '"/>'
-            + '<ellipse cx="13" cy="20" rx="3.5" ry="4" fill="white"/>'
-            + '<ellipse cx="27" cy="20" rx="3.5" ry="4" fill="white"/>'
-            + '<circle cx="14" cy="20.5" r="2" fill="' + colors.bg + '"/>'
-            + '<circle cx="28" cy="20.5" r="2" fill="' + colors.bg + '"/>'
-            + '</svg>';
-          chaser.style.left = (startX - gap) + "px";
-          chaser.style.transform = dir < 0 ? "scaleX(-1)" : "";
+          if (acrobatChases) {
+            fleeEl.innerHTML = stretchySVG(colors);
+            chaseEl.innerHTML = acrobatSVG(colors);
+          } else {
+            fleeEl.innerHTML = acrobatSVG(colors);
+            chaseEl.innerHTML = stretchySVG(colors);
+          }
 
-          chaseOverlay.appendChild(runner);
-          chaseOverlay.appendChild(chaser);
+          fleeEl.style.left = startX + "px";
+          chaseEl.style.left = (startX - gap) + "px";
+          chaseOverlay.appendChild(fleeEl);
+          chaseOverlay.appendChild(chaseEl);
 
-          /* Boing sound */
-          try {
-            var ac = new (window.AudioContext || window.webkitAudioContext)();
-            var osc = ac.createOscillator();
-            var gain = ac.createGain();
-            osc.type = "sine";
-            osc.frequency.setValueAtTime(300, ac.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(600, ac.currentTime + 0.1);
-            gain.gain.setValueAtTime(0.06, ac.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.15);
-            osc.connect(gain);
-            gain.connect(ac.destination);
-            osc.start();
-            osc.stop(ac.currentTime + 0.15);
-          } catch (e) {}
+          playBoing(300, 600, 0.06);
 
           /* Dust puffs */
           var dustCount = 0;
@@ -371,57 +378,233 @@ const nameLetters = site.name.split("").map((ch, i) => ({
             if (dustCount >= 3) { clearInterval(dustInterval); return; }
             var puff = document.createElement("div");
             puff.className = "dust-puff";
-            puff.style.width = randomBetween(6, 10) + "px";
-            puff.style.height = puff.style.width;
-            puff.style.bottom = randomBetween(0, 15) + "px";
-            var runnerX = parseFloat(runner.style.left) || 0;
-            puff.style.left = (runnerX - dir * 10) + "px";
+            var sz = randomBetween(6, 10);
+            puff.style.width = sz + "px";
+            puff.style.height = sz + "px";
+            puff.style.bottom = (30 + randomBetween(0, 15)) + "px";
+            puff.style.left = (parseFloat(chaseEl.style.left) - dir * 10) + "px";
             puff.style.background = colors.secondary;
             chaseOverlay.appendChild(puff);
             setTimeout(function () { if (puff.parentNode) puff.remove(); }, 600);
             dustCount++;
           }, duration / 4);
 
-          /* Animate */
+          /* Move scheduling state */
+          var acrobatLastMove = -500;
+          var stretchyLastMove = -500;
+          var acrobatMove = null;
+          var stretchyMove = null;
+          var ropeEl = null;
+          var armEl = null;
+          var catchStarted = false;
           var startTime = performance.now();
-          var hopCount = 0;
-          var leapAt = Math.floor(duration / 333 / 2);
+
+          function cleanup() {
+            fleeEl.remove();
+            chaseEl.remove();
+            clearInterval(dustInterval);
+            if (ropeEl) ropeEl.remove();
+            if (armEl) armEl.remove();
+            setTimeout(function () { chaseRunning = false; }, 1000);
+          }
 
           function animateChase(now) {
             var elapsed = now - startTime;
             var t = Math.min(elapsed / duration, 1);
-            var runX = startX + (endX - startX) * t;
-            var chaX = (startX - gap) + (endX - gap - (startX - gap)) * t;
 
-            /* Bouncy hop cycle: ~3 hops/sec */
-            var phase = (elapsed / 333) * Math.PI * 2;
+            var fleeX = startX + (endX - startX) * t;
+            var chaseX = (startX - gap) + ((endX - gap) - (startX - gap)) * t;
+
+            /* Determine which element is which character */
+            var aEl = acrobatChases ? chaseEl : fleeEl;
+            var sEl = acrobatChases ? fleeEl : chaseEl;
+            var aX = acrobatChases ? chaseX : fleeX;
+            var sX = acrobatChases ? fleeX : chaseX;
+
+            var hop = 333;
+            var phase = (elapsed / hop) * Math.PI * 2;
             var bounce = Math.abs(Math.sin(phase));
-            var sx = 1 + 0.08 * (1 - bounce);
-            var sy = 1 - 0.08 * (1 - bounce) + 0.15 * bounce;
-            var rot = Math.sin(phase) * 3;
 
-            /* Bigger leap mid-crossing */
-            var currentHop = Math.floor(elapsed / 333);
-            var leapBonus = (currentHop === leapAt) ? bounce * 15 : 0;
+            /* ---- ACROBAT PHYSICS ---- */
+            var aY = -bounce * 10;
+            var aSX = 1 + 0.06 * (1 - bounce);
+            var aSY = 1 - 0.06 * (1 - bounce) + 0.12 * bounce;
+            var aRot = Math.sin(phase) * 3;
 
-            var flipBase = dir < 0 ? "scaleX(-1) " : "";
-            runner.style.left = runX + "px";
-            runner.style.transform = flipBase + "translateY(" + (-bounce * 10 - leapBonus) + "px) scaleX(" + sx + ") scaleY(" + sy + ") rotate(" + rot + "deg)";
+            /* Schedule acrobat move */
+            if (!acrobatMove && elapsed - acrobatLastMove > randomBetween(800, 1200) && elapsed > 400 && t < 0.82) {
+              var mType = randomBetween(0, 3);
+              acrobatMove = { type: mType, start: elapsed, dur: mType === 2 ? 600 : 300 };
+              acrobatLastMove = elapsed;
+              if (mType === 2) {
+                ropeEl = document.createElement("div");
+                ropeEl.className = "chase-rope";
+                ropeEl.style.background = colors.ink;
+                ropeEl.style.height = "200px";
+                ropeEl.style.bottom = "60px";
+                chaseOverlay.appendChild(ropeEl);
+              }
+            }
 
-            chaser.style.left = chaX + "px";
-            var phase2 = ((elapsed - 80) / 333) * Math.PI * 2;
-            var bounce2 = Math.abs(Math.sin(phase2));
-            var sx2 = 1 + 0.06 * (1 - bounce2);
-            var sy2 = 1 - 0.06 * (1 - bounce2) + 0.12 * bounce2;
-            chaser.style.transform = flipBase + "translateY(" + (-bounce2 * 8) + "px) scaleX(" + sx2 + ") scaleY(" + sy2 + ") rotate(" + (Math.sin(phase2) * 2) + "deg)";
+            if (acrobatMove) {
+              var mt = elapsed - acrobatMove.start;
+              var mp = Math.min(mt / acrobatMove.dur, 1);
+
+              if (acrobatMove.type === 0) {
+                /* Front flip */
+                aRot = mp * 360;
+                aY = -bounce * 10 - Math.sin(mp * Math.PI) * 25;
+              } else if (acrobatMove.type === 1) {
+                /* Tuck jump */
+                aY = -bounce * 10 - Math.sin(mp * Math.PI) * 30;
+                aSX = 1 + 0.15 * Math.sin(mp * Math.PI);
+                aSY = 1 - 0.1 * Math.sin(mp * Math.PI);
+              } else if (acrobatMove.type === 2) {
+                /* Rope swing */
+                var swingArc = Math.sin(mp * Math.PI);
+                aY = -swingArc * 100;
+                aRot = Math.sin(mp * Math.PI * 2 - Math.PI / 2) * 25;
+                if (ropeEl) {
+                  ropeEl.style.left = (aX + 20) + "px";
+                  ropeEl.style.opacity = mp < 0.9 ? "1" : String(1 - (mp - 0.9) / 0.1);
+                  ropeEl.style.transform = "rotate(" + (-aRot * 0.3) + "deg)";
+                }
+              }
+
+              if (mp >= 1) {
+                acrobatMove = null;
+                if (ropeEl) { ropeEl.remove(); ropeEl = null; }
+              }
+            }
+
+            /* ---- STRETCHY PHYSICS ---- */
+            var sPhase = ((elapsed - 80) / hop) * Math.PI * 2;
+            var sBounce = Math.abs(Math.sin(sPhase));
+            var sY = -sBounce * 10;
+            var sSX = 1 + 0.14 * (1 - sBounce);
+            var sSY = 1 - 0.14 * (1 - sBounce) + 0.22 * sBounce;
+            var sRot = Math.sin(sPhase) * 5;
+
+            /* Schedule stretchy move */
+            if (!stretchyMove && elapsed - stretchyLastMove > randomBetween(900, 1400) && elapsed > 400 && t < 0.82) {
+              var sType = randomBetween(0, 2);
+              stretchyMove = { type: sType, start: elapsed, dur: sType === 0 ? 500 : 400 };
+              stretchyLastMove = elapsed;
+              if (sType === 0) {
+                armEl = document.createElement("div");
+                armEl.className = "chase-arm";
+                armEl.style.background = colors.secondary;
+                armEl.style.bottom = "50px";
+                armEl.style.width = "0px";
+                chaseOverlay.appendChild(armEl);
+              }
+            }
+
+            if (stretchyMove) {
+              var smt = elapsed - stretchyMove.start;
+              var smp = Math.min(smt / stretchyMove.dur, 1);
+
+              if (stretchyMove.type === 0) {
+                /* Arm stretch grab */
+                var armLen;
+                if (smp < 0.35) {
+                  armLen = (smp / 0.35) * 120;
+                } else if (smp < 0.5) {
+                  armLen = 120;
+                } else {
+                  armLen = 120 * Math.max(0, 1 - (smp - 0.5) / 0.3);
+                  sSX = 1 + 0.18 * Math.sin((smp - 0.5) / 0.5 * Math.PI * 2);
+                }
+                if (armEl) {
+                  armEl.style.width = Math.max(0, armLen) + "px";
+                  if (acrobatChases) {
+                    armEl.style.left = (sX + (dir > 0 ? -armLen - 5 : 30)) + "px";
+                  } else {
+                    armEl.style.left = (sX + (dir > 0 ? 30 : -armLen - 5)) + "px";
+                  }
+                }
+              } else if (stretchyMove.type === 1) {
+                /* Exaggerated leap */
+                if (smp < 0.12) {
+                  sSX = 1 + 0.35 * (smp / 0.12);
+                  sSY = 1 - 0.25 * (smp / 0.12);
+                } else if (smp < 0.5) {
+                  var upP = (smp - 0.12) / 0.38;
+                  sSX = 0.7;
+                  sSY = 1.35;
+                  sY = -upP * 40;
+                } else if (smp < 0.85) {
+                  var downP = (smp - 0.5) / 0.35;
+                  sSX = 0.7 + 0.3 * downP;
+                  sSY = 1.35 - 0.35 * downP;
+                  sY = -40 * (1 - downP);
+                } else {
+                  var landP = (smp - 0.85) / 0.15;
+                  sSX = 1.35 - 0.35 * landP;
+                  sSY = 0.7 + 0.3 * landP;
+                  sY = 0;
+                }
+              }
+
+              if (smp >= 1) {
+                stretchyMove = null;
+                if (armEl) { armEl.remove(); armEl = null; }
+              }
+            }
+
+            /* Apply transforms */
+            aEl.style.left = aX + "px";
+            aEl.style.transform = flipBase + "translateY(" + aY + "px) scaleX(" + aSX + ") scaleY(" + aSY + ") rotate(" + aRot + "deg)";
+
+            sEl.style.left = sX + "px";
+            sEl.style.transform = flipBase + "translateY(" + sY + "px) scaleX(" + sSX + ") scaleY(" + sSY + ") rotate(" + sRot + "deg)";
+
+            /* ---- CATCH VARIANT ---- */
+            if (isCatch && t > 0.75 && !catchStarted) {
+              catchStarted = true;
+              if (armEl) { armEl.remove(); armEl = null; }
+              if (ropeEl) { ropeEl.remove(); ropeEl = null; }
+              acrobatMove = null;
+              stretchyMove = null;
+
+              playBoing(180, 300, 0.05);
+
+              var tumble = document.createElement("div");
+              tumble.className = "chase-tumble";
+              tumble.innerHTML = acrobatSVG(colors) + stretchySVG(colors);
+              var midX = (aX + sX) / 2;
+              tumble.style.left = midX + "px";
+              chaseOverlay.appendChild(tumble);
+              fleeEl.style.display = "none";
+              chaseEl.style.display = "none";
+
+              var tumbleStart = performance.now();
+              var tumbleDur = 500;
+              var tumbleEndX = endX;
+
+              function animateTumble(tnow) {
+                var te = tnow - tumbleStart;
+                var tp = Math.min(te / tumbleDur, 1);
+                var tx = midX + (tumbleEndX - midX) * tp;
+                var trot = tp * 720;
+                var tsq = 1 + 0.15 * Math.abs(Math.sin(tp * Math.PI * 4));
+                tumble.style.left = tx + "px";
+                tumble.style.transform = flipBase + "rotate(" + trot + "deg) scaleX(" + (1 / tsq) + ") scaleY(" + tsq + ")";
+                if (tp < 1) {
+                  requestAnimationFrame(animateTumble);
+                } else {
+                  tumble.remove();
+                  cleanup();
+                }
+              }
+              requestAnimationFrame(animateTumble);
+              return;
+            }
 
             if (t < 1) {
               requestAnimationFrame(animateChase);
             } else {
-              runner.remove();
-              chaser.remove();
-              clearInterval(dustInterval);
-              setTimeout(function () { chaseRunning = false; }, 1000);
+              cleanup();
             }
           }
 
@@ -439,7 +622,7 @@ const nameLetters = site.name.split("").map((ch, i) => ({
           var height = randomBetween(20, 60);
           var top = randomBetween(10, 80);
           var offset = (Math.random() < 0.5 ? -1 : 1) * randomBetween(3, 6);
-          var duration = randomBetween(BLEED_DURATION_MIN, BLEED_DURATION_MAX);
+          var dur = randomBetween(BLEED_DURATION_MIN, BLEED_DURATION_MAX);
 
           bleedSlice.style.top = top + "%";
           bleedSlice.style.height = height + "px";
@@ -452,7 +635,7 @@ const nameLetters = site.name.split("").map((ch, i) => ({
           void bleedSlice.offsetWidth;
           bleedSlice.style.animation = "none";
           void bleedSlice.offsetWidth;
-          bleedSlice.style.animation = "microBleed " + duration + "ms ease forwards";
+          bleedSlice.style.animation = "microBleed " + dur + "ms ease forwards";
 
           root.classList.add("bleeding");
           glitchOverlay.classList.add("active");
@@ -462,7 +645,7 @@ const nameLetters = site.name.split("").map((ch, i) => ({
             root.classList.remove("bleeding");
             bleedSlice.style.animation = "none";
             bleedSlice.style.opacity = "0";
-          }, duration + 50);
+          }, dur + 50);
         }
 
         function scheduleBleed() {
@@ -475,7 +658,7 @@ const nameLetters = site.name.split("").map((ch, i) => ({
         }
 
         /* ---- HOP ---- */
-        function performHop(skipChase) {
+        function performHop() {
           if (userBusy()) return;
           if (timeSinceLastEvent() < MIN_GAP) return;
           lastEventTime = Date.now();
@@ -486,9 +669,7 @@ const nameLetters = site.name.split("").map((ch, i) => ({
           if (!reducedMotion.matches) {
             var colors = THEME_COLORS[target];
             var slices = glitchOverlay.querySelectorAll(".glitch-slice");
-            for (var i = 0; i < slices.length; i++) {
-              slices[i].style.background = colors.bg;
-            }
+            for (var i = 0; i < slices.length; i++) slices[i].style.background = colors.bg;
             glitchOverlay.classList.add("active");
           }
 
@@ -499,15 +680,10 @@ const nameLetters = site.name.split("").map((ch, i) => ({
             root.classList.remove("hopping");
             glitchOverlay.classList.remove("active");
             glitchTimeout = null;
-
-            /* Chase after hop */
-            if (!skipChase) {
-              setTimeout(function () { triggerChase(); }, 300);
-            }
+            setTimeout(function () { triggerChase(); }, 300);
           }, GLITCH_DURATION);
         }
 
-        /* Auto timer */
         function startAuto() {
           stopAuto();
           hopTimer = setInterval(function () {
@@ -521,7 +697,6 @@ const nameLetters = site.name.split("").map((ch, i) => ({
           if (bleedTimer) { clearTimeout(bleedTimer); bleedTimer = null; }
         }
 
-        /* Manual dot click */
         dots.forEach(function (dot) {
           dot.addEventListener("click", function () {
             var theme = dot.getAttribute("data-dot");
@@ -531,7 +706,6 @@ const nameLetters = site.name.split("").map((ch, i) => ({
             updateAutoBtn();
             stopAuto();
 
-            /* Manual switch with chase */
             lastEventTime = Date.now();
             root.classList.add("hopping");
             if (!reducedMotion.matches) {
@@ -551,7 +725,6 @@ const nameLetters = site.name.split("").map((ch, i) => ({
           });
         });
 
-        /* Auto toggle */
         autoBtn.addEventListener("click", function () {
           autoMode = !autoMode;
           localStorage.setItem("autoTheme", autoMode ? "on" : "off");
@@ -559,7 +732,7 @@ const nameLetters = site.name.split("").map((ch, i) => ({
           if (autoMode) { startAuto(); } else { stopAuto(); }
         });
 
-        /* ---- PART 1: JELLY NAME ---- */
+        /* ---- JELLY NAME ---- */
         var nameEl = document.getElementById("jelly-name");
         var letters = nameEl.querySelectorAll(".name-letter");
 
@@ -572,7 +745,6 @@ const nameLetters = site.name.split("").map((ch, i) => ({
           span.classList.add("jelly");
           setTimeout(function () { span.classList.remove("jelly"); }, 300);
 
-          /* Neighbor wobble */
           var idx = parseInt(span.getAttribute("data-idx"), 10);
           letters.forEach(function (l) {
             var li = parseInt(l.getAttribute("data-idx"), 10);
@@ -585,7 +757,7 @@ const nameLetters = site.name.split("").map((ch, i) => ({
           });
         });
 
-        /* ---- PART 8: EASTER EGG ---- */
+        /* ---- EASTER EGG ---- */
         document.addEventListener("keydown", function (e) {
           if (e.key === "g" && !e.ctrlKey && !e.metaKey && !e.altKey) {
             var tag = document.activeElement && document.activeElement.tagName;

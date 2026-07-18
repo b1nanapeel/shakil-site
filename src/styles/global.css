@@ -649,7 +649,7 @@ a.work-name:hover { color: var(--accent); }
 .critter-b { left: 5rem; }
 
 .critter-a svg { width: 40px; height: 40px; }
-.critter-b svg { width: 36px; height: 36px; }
+.critter-b svg { width: 38px; height: 38px; }
 
 .critter-eye {
   transition: transform 150ms ease;
@@ -677,10 +677,10 @@ a.work-name:hover { color: var(--accent); }
 
 .chase-overlay {
   position: fixed;
-  bottom: 30px;
+  bottom: 0;
   left: 0;
   right: 0;
-  height: 60px;
+  top: 0;
   z-index: 95;
   pointer-events: none;
   overflow: hidden;
@@ -688,7 +688,28 @@ a.work-name:hover { color: var(--accent); }
 
 .chase-runner {
   position: absolute;
-  bottom: 0;
+  bottom: 30px;
+  will-change: transform;
+}
+
+.chase-rope {
+  position: absolute;
+  width: 2px;
+  pointer-events: none;
+  transform-origin: bottom center;
+}
+
+.chase-arm {
+  position: absolute;
+  height: 6px;
+  border-radius: 3px;
+  pointer-events: none;
+  will-change: width;
+}
+
+.chase-tumble {
+  position: absolute;
+  bottom: 30px;
   will-change: transform;
 }
 
