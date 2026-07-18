@@ -24,7 +24,7 @@ import NavDock from "../components/NavDock.astro";
         if (t && VALID.indexOf(t) !== -1) {
           document.documentElement.setAttribute("data-theme", t);
         } else {
-          document.documentElement.setAttribute("data-theme", "wash");
+          document.documentElement.setAttribute("data-theme", "noir");
         }
       })();
     </script>
@@ -209,11 +209,11 @@ import NavDock from "../components/NavDock.astro";
       const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
       function getTheme(): string {
-        return document.documentElement.getAttribute("data-theme") || "wash";
+        return document.documentElement.getAttribute("data-theme") || "noir";
       }
 
       function getColors() {
-        return THEME_MAP[getTheme()] || THEME_MAP.wash;
+        return THEME_MAP[getTheme()] || THEME_MAP.noir;
       }
 
       let globe: any;

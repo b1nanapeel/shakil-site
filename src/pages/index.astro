@@ -44,7 +44,7 @@ const ALL_THEMES = ["wash","brooklyn","bazaar","chrome","brick","hoedown","meado
         if (t && VALID.indexOf(t) !== -1) {
           document.documentElement.setAttribute("data-theme", t);
         } else {
-          document.documentElement.setAttribute("data-theme", "wash");
+          document.documentElement.setAttribute("data-theme", "noir");
         }
       })();
     </script>
@@ -189,10 +189,10 @@ const ALL_THEMES = ["wash","brooklyn","bazaar","chrome","brick","hoedown","meado
     <script is:inline>
       (function () {
         var THEMES = ["wash","brooklyn","bazaar","chrome","brick","hoedown","meadow","cape","crimson","quest","arcade","floss","arcana","noir","clouds","maze","handheld","soda","cinema","volt","tropic","frost","press","terminal","reverie","ember","grove","mirage","depths"];
-        var HOP_INTERVAL = 40000;
+        var HOP_INTERVAL = 30000;
         var GLITCH_DURATION = 650;
-        var BLEED_MIN = 10000;
-        var BLEED_MAX = 14000;
+        var BLEED_MIN = 12000;
+        var BLEED_MAX = 18000;
         var BLEED_DURATION_MIN = 200;
         var BLEED_DURATION_MAX = 300;
         var MIN_GAP = 7000;
@@ -243,7 +243,7 @@ const ALL_THEMES = ["wash","brooklyn","bazaar","chrome","brick","hoedown","meado
         var hintPopup = document.getElementById("hint-popup");
         var hintCloseBtn = document.getElementById("hint-close");
 
-        var current = root.getAttribute("data-theme") || "wash";
+        var current = root.getAttribute("data-theme") || "noir";
         var autoMode = localStorage.getItem("autoTheme") !== "off";
         var hopTimer = null;
         var bleedTimer = null;
@@ -282,9 +282,50 @@ const ALL_THEMES = ["wash","brooklyn","bazaar","chrome","brick","hoedown","meado
         }
         updateSoundBtn();
 
-        function currentIndex() { return THEMES.indexOf(current); }
-        function nextTheme() { return THEMES[(currentIndex() + 1) % THEMES.length]; }
         function randomBetween(a, b) { return a + Math.floor(Math.random() * (b - a)); }
+
+        /* ---- SHUFFLE BAG ---- */
+        var hopBag = [];
+        var isFirstBag = !localStorage.getItem("theme");
+
+        function shuffleArray(arr) {
+          for (var i = arr.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+          }
+          return arr;
+        }
+
+        function refillBag() {
+          hopBag = THEMES.filter(function (t) { return t !== current; });
+          shuffleArray(hopBag);
+          if (isFirstBag && hopBag[0] === "noir") {
+            for (var i = 1; i < hopBag.length; i++) {
+              if (hopBag[i] !== "noir") {
+                var tmp = hopBag[0]; hopBag[0] = hopBag[i]; hopBag[i] = tmp;
+                break;
+              }
+            }
+          }
+          isFirstBag = false;
+        }
+
+        function nextTheme() {
+          if (hopBag.length === 0) refillBag();
+          var next = hopBag[0];
+          if (next === current) {
+            hopBag.shift();
+            if (hopBag.length === 0) refillBag();
+            next = hopBag[0];
+          }
+          return next;
+        }
+
+        function consumeFromBag() {
+          hopBag.shift();
+        }
+
+        refillBag();
 
         function updateCurrentDot() {
           if (!currentDot) return;
@@ -845,6 +886,7 @@ const ALL_THEMES = ["wash","brooklyn","bazaar","chrome","brick","hoedown","meado
           playHopZap();
 
           var target = nextTheme();
+          consumeFromBag();
           var colors = THEME_COLORS[target];
           root.classList.add("hopping");
 
